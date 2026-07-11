@@ -4,11 +4,15 @@ Owner: you
 Algorithm: Activity Selection Problem
 
 ## Files
-- `problem1_activity_selection.py` - main program
-- sample inputs/outputs - drop a few test cases here, we'll need them for the report
+- `problem1_activity_selection.py` - main program (run with `python problem1_activity_selection.py`)
+- `test_problem1_activity_selection.py` - test suite (run with `python -m pytest`)
+- `sample_runs.txt` - sample runs for the report's testing section
 
-## Don't forget to write down while building
+## How it works
+Sorts activities by end time (hand-written insertion sort, no built-in `sort()`/`sorted()` per the assignment rules), then greedily picks each activity whose start time is not before the last selected activity's end time.
+
+## Notes for the report
 - what the problem actually is
-- how you're making the greedy choice at each step and why that's the right call here
+- how the greedy choice (earliest end time first) works and why it's optimal here
 - how input/output works
-- anything that broke or any limitations you hit while testing
+- strengths/limitations: fast (O(n^2) due to manual sort, could be better with a smarter sort) and always optimal for this problem, but only works for single-resource scheduling

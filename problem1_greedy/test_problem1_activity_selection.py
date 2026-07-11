@@ -1,0 +1,59 @@
+from problem1_activity_selection import manual_sort_by_end, select_activities, format_selection_table
+
+
+def test_manual_sort_by_end_orders_ascending():
+    activities = [("C", 5, 9), ("A", 1, 4), ("B", 3, 5)]
+    result = manual_sort_by_end(activities)
+    assert result == [("A", 1, 4), ("B", 3, 5), ("C", 5, 9)]
+
+
+def test_select_activities_empty_input_returns_empty():
+    assert select_activities([]) == []
+
+
+def test_select_activities_no_overlaps_selects_all():
+    activities = [("A", 1, 2), ("B", 3, 4), ("C", 5, 6)]
+    assert select_activities(activities) == [("A", 1, 2), ("B", 3, 4), ("C", 5, 6)]
+
+
+def test_select_activities_all_overlapping_selects_one():
+    activities = [("A", 1, 10), ("B", 2, 9), ("C", 3, 8)]
+    assert select_activities(activities) == [("C", 3, 8)]
+
+
+def test_select_activities_classic_textbook_case():
+    activities = [
+        ("A1", 1, 4), ("A2", 3, 5), ("A3", 0, 6), ("A4", 5, 7),
+        ("A5", 3, 9), ("A6", 5, 9), ("A7", 6, 10), ("A8", 8, 11),
+        ("A9", 8, 12), ("A10", 2, 14), ("A11", 12, 16),
+    ]
+    result = select_activities(activities)
+    assert result == [
+        ("A1", 1, 4), ("A4", 5, 7), ("A8", 8, 11), ("A11", 12, 16),
+    ]
+
+
+def test_select_activities_activity_touching_at_boundary_is_compatible():
+    # activity starting exactly when the previous one ends is allowed
+    activities = [("A", 1, 4), ("B", 4, 8)]
+    assert select_activities(activities) == [("A", 1, 4), ("B", 4, 8)]
+
+
+def test_select_activities_tie_on_end_time_keeps_stable_order():
+    activities = [("A", 1, 5), ("B", 0, 5)]
+    result = select_activities(activities)
+    assert len(result) == 1
+    assert result[0][2] == 5
+
+
+def test_format_selection_table_empty_selection():
+    assert format_selection_table([]) == "No activities selected."
+
+
+def test_format_selection_table_lists_name_start_end_and_count():
+    selected = [("A1", 1, 4), ("A4", 5, 7)]
+    output = format_selection_table(selected)
+    assert "A1" in output
+    assert "A4" in output
+    assert "1" in output and "4" in output
+    assert "Total selected: 2" in output

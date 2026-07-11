@@ -1,0 +1,66 @@
+Sample Run 1 - typical case with one overlap
+----------------------------------------------
+Input:
+  4 activities
+  A1 1 4
+  A2 3 5
+  A3 0 6
+  A4 5 7
+
+Expected output: A1 (1-4) and A4 (5-7) selected, A2/A3 rejected (overlap with A1/A3)
+Actual output:
+  Name      Start     End
+  A1        1         4
+  A4        5         7
+
+  Total selected: 2
+Result: PASS
+
+
+Sample Run 2 - invalid input recovery
+----------------------------------------------
+Input:
+  count = "abc" (invalid) -> re-prompted
+  2 activities
+  A1 1 4
+  "bad" (invalid format) -> re-prompted
+  A2 5 7
+
+Expected output: program rejects bad input, re-prompts, then selects both A1 and A2 (no overlap)
+Actual output:
+  How many activities? Please enter a whole number.
+  How many activities?
+  ...
+  Invalid format. Expected: name start end
+  ...
+  Name      Start     End
+  A1        1         4
+  A2        5         7
+
+  Total selected: 2
+Result: PASS
+
+
+Sample Run 3 - zero activities
+----------------------------------------------
+Input:
+  0 activities
+
+Expected output: "No activities selected."
+Actual output:
+  No activities selected.
+Result: PASS
+
+
+Sample Run 4 - all activities overlapping (classic algorithm test, see test suite)
+----------------------------------------------
+Input: A(1,10), B(2,9), C(3,8)
+Expected: only C(3,8) selected (earliest end time among fully overlapping activities)
+Result: PASS (covered in test_activity_selection.py)
+
+
+Sample Run 5 - classic textbook 11-activity case (see test suite)
+----------------------------------------------
+Input: 11 activities (standard CLRS example)
+Expected: A1, A4, A8, A11 selected
+Result: PASS (covered in test_activity_selection.py)
