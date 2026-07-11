@@ -8,10 +8,12 @@ Deadline: 9 August 2026, 11:59pm. Late submissions accepted until 16 Aug but los
 
 | Name | Problem | Algorithm |
 |---|---|---|
-| TBD | 1 - Greedy | TBD |
-| TBD | 2 - DP/Backtracking | TBD |
-| TBD | 3 - Heuristic | TBD |
-| TBD | Docs/Integration | - |
+| you | 1 - Greedy (solo) | Activity Selection Problem |
+| TBD | 2 - DP/Backtracking (pair) | TBD |
+| TBD | 2 - DP/Backtracking (pair) | TBD |
+| TBD | 3 - Heuristic (pair) | TBD |
+| TBD | 3 - Heuristic (pair) | TBD |
+| TBD | Docs/Integration (solo) | - |
 
 ## Folders
 

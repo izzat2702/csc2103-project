@@ -1,10 +1,10 @@
 # Problem 1 - Greedy
 
-Owner: TBD
-Algorithm: TBD - pick one of Activity Selection, Fractional Knapsack, Job Sequencing with Deadlines, Huffman Coding, MST (Prim's or Kruskal's), Dijkstra's
+Owner: you
+Algorithm: Activity Selection Problem
 
 ## Files
-- `problem1_<algo>.py` - rename this once you've picked the algorithm
+- `problem1_activity_selection.py` - main program
 - sample inputs/outputs - drop a few test cases here, we'll need them for the report
 
 ## Don't forget to write down while building
