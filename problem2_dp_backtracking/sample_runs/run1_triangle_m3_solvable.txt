@@ -1,0 +1,57 @@
+====================================================================
+ CSC2103 - Problem 2: Graph Colouring using Backtracking
+====================================================================
+Given a graph and m colours, decide whether every vertex can be
+coloured so that no two connected vertices share a colour.
+
+--- Main menu ---
+  1. Enter my own graph
+  2. Use a built-in sample graph
+  3. Find the minimum number of colours (chromatic number)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 1
+
+--- Enter your graph ---
+Vertices are numbered starting from 0.
+Number of vertices (V): 3
+Number of colours to try (m): 3
+Number of edges (E), 0 to 3: 3
+Edge 1 of 3 - enter two vertex numbers.
+  first vertex  (0 to 2): 0
+  second vertex (0 to 2): 1
+Edge 2 of 3 - enter two vertex numbers.
+  first vertex  (0 to 2): 1
+  second vertex (0 to 2): 2
+Edge 3 of 3 - enter two vertex numbers.
+  first vertex  (0 to 2): 0
+  second vertex (0 to 2): 2
+
+Adjacency matrix (1 = edge, 0 = no edge):
+      0  1  2
+     --------
+ 0 |  0  1  1
+ 1 |  1  0  1
+ 2 |  1  1  0
+
+SOLUTION FOUND using 3 of the 3 available colour(s).
+
+  +----------+---------------------+
+  | Vertex   | Colour              |
+  +----------+---------------------+
+  | 0        | Colour 1 (Red)      |
+  | 1        | Colour 2 (Green)    |
+  | 2        | Colour 3 (Blue)     |
+  +----------+---------------------+
+
+Verification: PASSED - all edges connect differently-coloured vertices
+
+--- Main menu ---
+  1. Enter my own graph
+  2. Use a built-in sample graph
+  3. Find the minimum number of colours (chromatic number)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 5
+
+Goodbye.

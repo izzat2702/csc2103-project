@@ -1,0 +1,56 @@
+--- Main menu ---
+  1. Enter my own graph
+  2. Use a built-in sample graph
+  3. Find the minimum number of colours (chromatic number)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 4
+
+====================================================================
+TEST SUITE - expected vs actual
+====================================================================
+
+Test: Triangle (K3), m=3
+  Expected : solvable
+  Actual   : solvable
+  Colouring: v0=1, v1=2, v2=3
+  Check    : verified: all edges connect differently-coloured vertices
+  Result   : PASS
+
+Test: Triangle (K3), m=2  - infeasible case
+  Expected : no solution
+  Actual   : no solution
+  Check    : no colouring produced, nothing to verify
+  Result   : PASS
+
+Test: Cycle of 4 (square), m=2
+  Expected : solvable
+  Actual   : solvable
+  Colouring: v0=1, v1=2, v2=1, v3=2
+  Check    : verified: all edges connect differently-coloured vertices
+  Result   : PASS
+
+Test: Path graph of 4 vertices, m=2
+  Expected : solvable
+  Actual   : solvable
+  Colouring: v0=1, v1=2, v2=1, v3=2
+  Check    : verified: all edges connect differently-coloured vertices
+  Result   : PASS
+
+Test: Disconnected graph (two separate edges + isolated vertex), m=2
+  Expected : solvable
+  Actual   : solvable
+  Colouring: v0=1, v1=2, v2=1, v3=2, v4=1
+  Check    : verified: all edges connect differently-coloured vertices
+  Result   : PASS
+
+Test: Single vertex, no edges, m=1  - smallest input
+  Expected : solvable
+  Actual   : solvable
+  Colouring: v0=1
+  Check    : verified: all edges connect differently-coloured vertices
+  Result   : PASS
+
+====================================================================
+6 of 6 tests passed.
+====================================================================

@@ -1,0 +1,32 @@
+====================================================================
+ CSC2103 - Problem 2: Graph Colouring using Backtracking
+====================================================================
+Given a graph and m colours, decide whether every vertex can be
+coloured so that no two connected vertices share a colour.
+
+--- Main menu ---
+  1. Enter my own graph
+  2. Use a built-in sample graph
+  3. Find the minimum number of colours (chromatic number)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 2
+
+--- Sample graphs ---
+  1. Triangle - 3 vertices, all joined  (3 vertices, 3 edges)
+  2. Square cycle - 4 vertices in a ring  (4 vertices, 4 edges)
+  3. Path - 4 vertices in a line  (4 vertices, 3 edges)
+  4. Exam timetable example - 5 exams with clashes  (5 vertices, 6 edges)
+Choose a sample (1 to 4): 1
+Loaded: Triangle - 3 vertices, all joined
+Number of colours to try (m): 2
+
+Adjacency matrix (1 = edge, 0 = no edge):
+      0  1  2
+     --------
+ 0 |  0  1  1
+ 1 |  1  0  1
+ 2 |  1  1  0
+
+NO SOLUTION: this graph of 3 vertices cannot be properly coloured with only 2 colour(s).
+Try again with a larger m, or use option 3 to find the minimum number of colours needed.
