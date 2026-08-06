@@ -1,0 +1,147 @@
+============================================================================
+  CSC2103 Data Structures & Algorithms - Group Project
+  Problem 3: Heuristic Algorithms
+  Travelling Salesman Problem  -  Nearest Neighbour + 2-opt
+============================================================================
+
+  Select input method:
+    1. Use a built-in sample dataset
+    2. Enter cities manually
+    3. Generate random cities (seeded, reproducible)
+    4. Exit
+
+  Your choice: 
+============================================================================
+  BUILT-IN SAMPLE DATASETS
+============================================================================
+  1. City Courier Route - 8 drop-off points
+  2. Nearest Neighbour Trap - 7 points (heuristic performs badly here)
+  3. Regular Grid - 9 points in a 3x3 layout
+  4. Regional Network - 15 stops (too large for exhaustive search)
+
+  Select a dataset: 
+============================================================================
+  INPUT DATA
+============================================================================
+  Dataset: Nearest Neighbour Trap - 7 points (heuristic performs badly here)
+  Cities : 7
+
+  No.  City            X          Y
+  ---------------------------------
+  1    A *         45.00      33.00
+  2    B           33.00      41.00
+  3    C           26.00      35.00
+  4    D           26.00      10.00
+  5    E           50.00      15.00
+  6    F            0.00      14.00
+  7    G           60.00      32.00
+  ---------------------------------
+  * depot - the tour starts and ends here
+
+============================================================================
+  STAGE 1 - NEAREST NEIGHBOUR HEURISTIC (starting at A)
+============================================================================
+
+  Rule: from the current city, always move to the nearest city
+        that has not been visited yet. Never reconsider.
+
+  Tour found:
+  A -> B -> C -> D -> E -> G -> F -> A
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     A    ->  B           14.42
+  2     B    ->  C            9.22
+  3     C    ->  D           25.00
+  4     D    ->  E           24.52
+  5     E    ->  G           19.72
+  6     G    ->  F           62.64
+  7     F    ->  A           48.85  (return)
+  --------------------------------
+  TOTAL TOUR COST           204.37
+
+============================================================================
+  STAGE 2 - 2-OPT IMPROVEMENT
+============================================================================
+
+  Repeatedly removes two edges and reconnects them the other way
+  round whenever doing so shortens the tour. Stops when no single
+  swap can improve the tour any further (a local optimum).
+
+  Improved tour:
+  A -> G -> E -> D -> F -> C -> B -> A
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     A    ->  G           15.03
+  2     G    ->  E           19.72
+  3     E    ->  D           24.52
+  4     D    ->  F           26.31
+  5     F    ->  C           33.42
+  6     C    ->  B            9.22
+  7     B    ->  A           14.42  (return)
+  --------------------------------
+  TOTAL TOUR COST           142.64
+
+  Passes over the tour : 3
+  Cost before 2-opt    :     204.37
+  Cost after 2-opt     :     142.64
+  Saving               :      61.73  (30.20%)
+
+============================================================================
+  STAGE 3 - SENSITIVITY TO THE STARTING CITY
+============================================================================
+
+  A known weakness of Nearest Neighbour: the same set of cities
+  produces different tours depending only on where we begin.
+
+  Start city   NN tour cost
+  ---------------------
+  A              204.37  <- worst
+  B              156.54
+  C              142.64  <- best
+  D              203.40
+  E              175.99
+  F              189.92
+  G              200.84
+  ---------------------
+  Best start : C (142.64)
+  Worst start: A (204.37)
+  Spread     : 61.73  (43.27% worse from the wrong start)
+
+============================================================================
+  STAGE 4 - VALIDATION AGAINST THE TRUE OPTIMUM
+============================================================================
+
+  Exhaustively checking all 720 possible tours...
+  Tours evaluated: 720
+
+  Optimal tour:
+  A -> B -> C -> F -> D -> E -> G -> A
+
+  Optimal cost: 142.64
+
+============================================================================
+  RESULTS SUMMARY
+============================================================================
+
+  Method                                       Cost   vs Optimal
+  --------------------------------------------------------------
+  Nearest Neighbour (from A)                 204.37      +43.27%
+    + 2-opt improvement                      142.64      optimal
+  Best NN over all starts (C)                142.64      optimal
+    + 2-opt improvement                      142.64      optimal
+  Exhaustive search (true optimum)           142.64      optimal
+  --------------------------------------------------------------
+
+  Plain Nearest Neighbour was 43.27% worse than the optimum.
+  After 2-opt and multi-start, the heuristic found the
+  optimal tour - while checking only a tiny fraction of
+  the 720 possible tours.
+
+  Note: matching the optimum here does NOT prove the heuristic
+  always will. Dataset 2 is included to show a case where
+  plain Nearest Neighbour performs badly.
+
+  Run another analysis? (y/n): 
+  Program ended.

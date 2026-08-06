@@ -1,0 +1,175 @@
+============================================================================
+  CSC2103 Data Structures & Algorithms - Group Project
+  Problem 3: Heuristic Algorithms
+  Travelling Salesman Problem  -  Nearest Neighbour + 2-opt
+============================================================================
+
+  Select input method:
+    1. Use a built-in sample dataset
+    2. Enter cities manually
+    3. Generate random cities (seeded, reproducible)
+    4. Exit
+
+  Your choice: 
+============================================================================
+  BUILT-IN SAMPLE DATASETS
+============================================================================
+  1. City Courier Route - 8 drop-off points
+  2. Nearest Neighbour Trap - 7 points (heuristic performs badly here)
+  3. Regular Grid - 9 points in a 3x3 layout
+  4. Regional Network - 15 stops (too large for exhaustive search)
+
+  Select a dataset: 
+============================================================================
+  INPUT DATA
+============================================================================
+  Dataset: Regional Network - 15 stops (too large for exhaustive search)
+  Cities : 15
+
+  No.  City            X          Y
+  ---------------------------------
+  1    S1 *        12.00       8.00
+  2    S2          46.00      15.00
+  3    S3          23.00      55.00
+  4    S4          67.00      42.00
+  5    S5           5.00      31.00
+  6    S6          58.00      60.00
+  7    S7          34.00      22.00
+  8    S8          71.00      18.00
+  9    S9          19.00      44.00
+  10   S10         52.00      33.00
+  11   S11         40.00      68.00
+  12   S12          8.00      62.00
+  13   S13         63.00       5.00
+  14   S14         29.00      37.00
+  15   S15         75.00      55.00
+  ---------------------------------
+  * depot - the tour starts and ends here
+
+============================================================================
+  STAGE 1 - NEAREST NEIGHBOUR HEURISTIC (starting at S1)
+============================================================================
+
+  Rule: from the current city, always move to the nearest city
+        that has not been visited yet. Never reconsider.
+
+  Tour found:
+  S1 -> S5 -> S9 -> S3 -> S12 -> S11 -> S6 -> S15 -> S4 -> S10 -> S2 -> 
+      S7 -> S14 -> S8 -> S13 -> S1
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     S1   ->  S5          24.04
+  2     S5   ->  S9          19.10
+  3     S9   ->  S3          11.70
+  4     S3   ->  S12         16.55
+  5     S12  ->  S11         32.56
+  6     S11  ->  S6          19.70
+  7     S6   ->  S15         17.72
+  8     S15  ->  S4          15.26
+  9     S4   ->  S10         17.49
+  10    S10  ->  S2          18.97
+  11    S2   ->  S7          13.89
+  12    S7   ->  S14         15.81
+  13    S14  ->  S8          46.10
+  14    S8   ->  S13         15.26
+  15    S13  ->  S1          51.09  (return)
+  --------------------------------
+  TOTAL TOUR COST           335.26
+
+============================================================================
+  STAGE 2 - 2-OPT IMPROVEMENT
+============================================================================
+
+  Repeatedly removes two edges and reconnects them the other way
+  round whenever doing so shortens the tour. Stops when no single
+  swap can improve the tour any further (a local optimum).
+
+  Improved tour:
+  S1 -> S5 -> S9 -> S12 -> S3 -> S11 -> S6 -> S15 -> S4 -> S10 -> S8 -> 
+      S13 -> S2 -> S7 -> S14 -> S1
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     S1   ->  S5          24.04
+  2     S5   ->  S9          19.10
+  3     S9   ->  S12         21.10
+  4     S12  ->  S3          16.55
+  5     S3   ->  S11         21.40
+  6     S11  ->  S6          19.70
+  7     S6   ->  S15         17.72
+  8     S15  ->  S4          15.26
+  9     S4   ->  S10         17.49
+  10    S10  ->  S8          24.21
+  11    S8   ->  S13         15.26
+  12    S13  ->  S2          19.72
+  13    S2   ->  S7          13.89
+  14    S7   ->  S14         15.81
+  15    S14  ->  S1          33.62  (return)
+  --------------------------------
+  TOTAL TOUR COST           294.88
+
+  Passes over the tour : 3
+  Cost before 2-opt    :     335.26
+  Cost after 2-opt     :     294.88
+  Saving               :      40.38  (12.04%)
+
+============================================================================
+  STAGE 3 - SENSITIVITY TO THE STARTING CITY
+============================================================================
+
+  A known weakness of Nearest Neighbour: the same set of cities
+  produces different tours depending only on where we begin.
+
+  Start city   NN tour cost
+  ---------------------
+  S1             335.26  <- best
+  S2             336.52
+  S3             357.47
+  S4             354.72
+  S5             366.01
+  S6             339.69
+  S7             388.04  <- worst
+  S8             336.52
+  S9             365.61
+  S10            347.90
+  S11            339.69
+  S12            377.49
+  S13            353.77
+  S14            345.55
+  S15            344.44
+  ---------------------
+  Best start : S1 (335.26)
+  Worst start: S7 (388.04)
+  Spread     : 52.77  (15.74% worse from the wrong start)
+
+============================================================================
+  STAGE 4 - VALIDATION AGAINST THE TRUE OPTIMUM
+============================================================================
+
+  Exhaustive search skipped.
+  This instance has 15 cities, which means 87,178,291,200 possible tours -
+  far too many to check one by one.
+
+  This is exactly why a heuristic is needed: it returns a good
+  tour in a fraction of a second, where exact search cannot
+  finish at all.
+
+============================================================================
+  RESULTS SUMMARY
+============================================================================
+
+  Method                                       Cost   vs Optimal
+  --------------------------------------------------------------
+  Nearest Neighbour (from S1)                335.26      unknown
+    + 2-opt improvement                      294.88      unknown
+  Best NN over all starts (S1)               335.26      unknown
+    + 2-opt improvement                      294.88      unknown
+  --------------------------------------------------------------
+
+  No optimality guarantee is available at this size - that is
+  the trade-off a heuristic makes: speed in exchange for
+  certainty.
+
+  Run another analysis? (y/n): 
+  Program ended.

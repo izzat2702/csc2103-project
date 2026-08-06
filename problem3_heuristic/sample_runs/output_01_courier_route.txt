@@ -1,0 +1,154 @@
+============================================================================
+  CSC2103 Data Structures & Algorithms - Group Project
+  Problem 3: Heuristic Algorithms
+  Travelling Salesman Problem  -  Nearest Neighbour + 2-opt
+============================================================================
+
+  Select input method:
+    1. Use a built-in sample dataset
+    2. Enter cities manually
+    3. Generate random cities (seeded, reproducible)
+    4. Exit
+
+  Your choice: 
+============================================================================
+  BUILT-IN SAMPLE DATASETS
+============================================================================
+  1. City Courier Route - 8 drop-off points
+  2. Nearest Neighbour Trap - 7 points (heuristic performs badly here)
+  3. Regular Grid - 9 points in a 3x3 layout
+  4. Regional Network - 15 stops (too large for exhaustive search)
+
+  Select a dataset: 
+============================================================================
+  INPUT DATA
+============================================================================
+  Dataset: City Courier Route - 8 drop-off points
+  Cities : 8
+
+  No.  City                 X          Y
+  --------------------------------------
+  1    Depot *           5.00      37.00
+  2    Northgate        10.00      12.00
+  3    Riverside        32.00      28.00
+  4    Hillcrest        23.00      20.00
+  5    Eastpark         21.00      18.00
+  6    Southbank        49.00      49.00
+  7    Westfield        43.00      18.00
+  8    Lakeview         27.00      43.00
+  --------------------------------------
+  * depot - the tour starts and ends here
+
+============================================================================
+  STAGE 1 - NEAREST NEIGHBOUR HEURISTIC (starting at Depot)
+============================================================================
+
+  Rule: from the current city, always move to the nearest city
+        that has not been visited yet. Never reconsider.
+
+  Tour found:
+  Depot -> Lakeview -> Riverside -> Hillcrest -> Eastpark -> Northgate -> 
+      Westfield -> Southbank -> Depot
+
+  Leg   From          To            Distance
+  ------------------------------------------
+  1     Depot     ->  Lakeview         22.80
+  2     Lakeview  ->  Riverside        15.81
+  3     Riverside ->  Hillcrest        12.04
+  4     Hillcrest ->  Eastpark          2.83
+  5     Eastpark  ->  Northgate        12.53
+  6     Northgate ->  Westfield        33.54
+  7     Westfield ->  Southbank        31.58
+  8     Southbank ->  Depot            45.61  (return)
+  ------------------------------------------
+  TOTAL TOUR COST                     176.74
+
+============================================================================
+  STAGE 2 - 2-OPT IMPROVEMENT
+============================================================================
+
+  Repeatedly removes two edges and reconnects them the other way
+  round whenever doing so shortens the tour. Stops when no single
+  swap can improve the tour any further (a local optimum).
+
+  Improved tour:
+  Depot -> Northgate -> Eastpark -> Hillcrest -> Riverside -> Westfield -> 
+      Southbank -> Lakeview -> Depot
+
+  Leg   From          To            Distance
+  ------------------------------------------
+  1     Depot     ->  Northgate        25.50
+  2     Northgate ->  Eastpark         12.53
+  3     Eastpark  ->  Hillcrest         2.83
+  4     Hillcrest ->  Riverside        12.04
+  5     Riverside ->  Westfield        14.87
+  6     Westfield ->  Southbank        31.58
+  7     Southbank ->  Lakeview         22.80
+  8     Lakeview  ->  Depot            22.80  (return)
+  ------------------------------------------
+  TOTAL TOUR COST                     144.94
+
+  Passes over the tour : 4
+  Cost before 2-opt    :     176.74
+  Cost after 2-opt     :     144.94
+  Saving               :      31.79  (17.99%)
+
+============================================================================
+  STAGE 3 - SENSITIVITY TO THE STARTING CITY
+============================================================================
+
+  A known weakness of Nearest Neighbour: the same set of cities
+  produces different tours depending only on where we begin.
+
+  Start city    NN tour cost
+  --------------------------
+  Depot               176.74
+  Northgate           194.12
+  Riverside           144.94  <- best
+  Hillcrest           164.86
+  Eastpark            203.25  <- worst
+  Southbank           165.57
+  Westfield           144.94
+  Lakeview            165.57
+  --------------------------
+  Best start : Riverside (144.94)
+  Worst start: Eastpark (203.25)
+  Spread     : 58.30  (40.23% worse from the wrong start)
+
+============================================================================
+  STAGE 4 - VALIDATION AGAINST THE TRUE OPTIMUM
+============================================================================
+
+  Exhaustively checking all 5,040 possible tours...
+  Tours evaluated: 5,040
+
+  Optimal tour:
+  Depot -> Northgate -> Eastpark -> Hillcrest -> Riverside -> Westfield -> 
+      Southbank -> Lakeview -> Depot
+
+  Optimal cost: 144.94
+
+============================================================================
+  RESULTS SUMMARY
+============================================================================
+
+  Method                                       Cost   vs Optimal
+  --------------------------------------------------------------
+  Nearest Neighbour (from Depot)             176.74      +21.94%
+    + 2-opt improvement                      144.94      optimal
+  Best NN over all starts (Riverside)        144.94      optimal
+    + 2-opt improvement                      144.94      optimal
+  Exhaustive search (true optimum)           144.94      optimal
+  --------------------------------------------------------------
+
+  Plain Nearest Neighbour was 21.94% worse than the optimum.
+  After 2-opt and multi-start, the heuristic found the
+  optimal tour - while checking only a tiny fraction of
+  the 5,040 possible tours.
+
+  Note: matching the optimum here does NOT prove the heuristic
+  always will. Dataset 2 is included to show a case where
+  plain Nearest Neighbour performs badly.
+
+  Run another analysis? (y/n): 
+  Program ended.
