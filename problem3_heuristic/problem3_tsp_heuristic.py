@@ -1,43 +1,42 @@
 """
-problem3_tsp_heuristic.py
--------------------------
-Console program for the CSC2103 Group Project - Problem 3: Heuristic Algorithms.
+CSC2103 Data Structures and Algorithms - Group Project
+Problem 3: Heuristic Algorithms - Travelling Salesman Problem (TSP)
 
-SCENARIO
-    A delivery van leaves the depot, must visit every drop-off point exactly
-    once, and return to the depot. We want the cheapest possible round trip.
-    This is the Travelling Salesman Problem (TSP).
+Console program that finds a short round trip visiting every delivery point
+exactly once and returning to the depot, using a hand-written Nearest Neighbour
+heuristic followed by a 2-opt improvement pass.
 
-APPROACH
-    1. Build a tour using the Nearest Neighbour heuristic.
-    2. Improve it using a 2-opt local search pass.
-    3. For small instances, run an exhaustive search as well, so the
-       heuristic's answer can be measured against the TRUE optimum.
+Cities are numbered 0 .. n-1 (0-based). City 0 is the depot, so every tour
+starts and ends there.
 
-    Neither heuristic guarantees the optimal tour. Both aim to find a good
-    tour quickly. Step 3 is how we prove how good "good" actually is.
+A tour is stored as an ordered list of city indices, for example [0, 3, 1, 2].
+It is read as a cycle: the last city always joins back to the first.
 
-DIVISION OF FILES
-    This file handles input, output and presentation only.
-    All algorithmic logic lives in tsp_algorithms.py.
+This file handles input, output and presentation only. All algorithmic logic
+lives in tsp_algorithms.py.
 
-USAGE
-    python problem3_tsp_heuristic.py
+No external or built-in optimisation library is used. The algorithms are
+implemented manually as required by the assignment brief.
 """
 
-import random                     # used ONLY to generate input coordinates,
-                                  # never inside the algorithms themselves
+import random                     # only used to generate input coordinates,
+                                  # never inside any algorithm
 import tsp_algorithms as tsp
 
 
+# Width of the console output, used by every rule and wrapped line.
 LINE_WIDTH = 76
 
 
-# ---------------------------------------------------------------------------
-# Built-in sample datasets
-# ---------------------------------------------------------------------------
+# ============================================================================
+#  PART 1 - BUILT-IN SAMPLE DATASETS
+# ============================================================================
+
 # Each dataset is (description, [city names], [(x, y) coordinates]).
-# Coordinates are in kilometres on a flat grid. City index 0 is the depot.
+# Coordinates are in kilometres on a flat grid, and city index 0 is the depot.
+#
+# Dataset 2 is deliberately chosen: it is a case where Nearest Neighbour
+# performs badly, which shows that the heuristic gives no optimality guarantee.
 
 SAMPLE_DATASETS = {
     "1": (
@@ -69,15 +68,19 @@ SAMPLE_DATASETS = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Small output helpers
-# ---------------------------------------------------------------------------
+# ============================================================================
+#  PART 2 - INPUT / OUTPUT AND VALIDATION
+# ============================================================================
+
+# --------------------------------------------------------------- layout ----
 
 def print_rule(character="-"):
+    """Draw one horizontal line the full width of the console."""
     print(character * LINE_WIDTH)
 
 
 def print_banner():
+    """Print the program title block shown once at start-up."""
     print_rule("=")
     print("  CSC2103 Data Structures & Algorithms - Group Project")
     print("  Problem 3: Heuristic Algorithms")
@@ -86,6 +89,7 @@ def print_banner():
 
 
 def print_section(title):
+    """Print a boxed heading so each stage of the run is easy to find."""
     print()
     print_rule("=")
     print("  " + title)
@@ -93,19 +97,25 @@ def print_section(title):
 
 
 def factorial(number):
-    """Written out manually rather than importing math.factorial."""
+    """
+    Return number! using a plain loop.
+
+    Written out by hand rather than importing math.factorial, to keep the
+    program free of library-provided helpers.
+    """
     result = 1
     for value in range(2, number + 1):
         result *= value
     return result
 
 
-# ---------------------------------------------------------------------------
-# Input validation helpers
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------- input ----
 
 def read_int(prompt, low, high):
-    """Keep asking until the user gives a whole number inside [low, high]."""
+    """
+    Keep asking until the user types a whole number within range.
+    Returns the validated integer.
+    """
     while True:
         raw = input(prompt).strip()
         try:
@@ -120,7 +130,10 @@ def read_int(prompt, low, high):
 
 
 def read_float(prompt):
-    """Keep asking until the user gives a valid number."""
+    """
+    Keep asking until the user types a number, decimals allowed.
+    Returns the validated float.
+    """
     while True:
         raw = input(prompt).strip()
         try:
@@ -130,7 +143,10 @@ def read_float(prompt):
 
 
 def read_choice(prompt, valid_options):
-    """Keep asking until the user picks one of the allowed menu options."""
+    """
+    Keep asking until the user picks one of the allowed menu options.
+    Returns the chosen option in lower case.
+    """
     while True:
         raw = input(prompt).strip().lower()
         if raw in valid_options:
@@ -138,12 +154,11 @@ def read_choice(prompt, valid_options):
         print("  ! Please choose one of: %s" % ", ".join(valid_options))
 
 
-# ---------------------------------------------------------------------------
-# Input collection
-# ---------------------------------------------------------------------------
-
 def choose_sample_dataset():
-    """Let the user pick one of the built-in datasets."""
+    """
+    Let the user pick one of the built-in datasets.
+    Returns (description, names, coords).
+    """
     print_section("BUILT-IN SAMPLE DATASETS")
     for key in sorted(SAMPLE_DATASETS.keys()):
         description = SAMPLE_DATASETS[key][0]
@@ -156,7 +171,15 @@ def choose_sample_dataset():
 
 
 def enter_cities_manually():
-    """Collect city names and coordinates from the user, one at a time."""
+    """
+    Collect the cities from the user, one at a time.
+    Returns (description, names, coords).
+
+    Validation performed:
+      - the city count must be a whole number from 3 to 12
+      - both coordinates must be numbers, decimals allowed
+      - a blank name falls back to a default such as "City3"
+    """
     print_section("MANUAL CITY ENTRY")
     print("  City 1 is treated as the depot (the tour starts and ends there).")
     print()
@@ -182,10 +205,12 @@ def enter_cities_manually():
 
 def generate_random_cities():
     """
-    Build a random instance.
+    Build a random instance of the problem.
+    Returns (description, names, coords).
 
-    A seed is requested so the exact same dataset can be reproduced later -
-    this matters for the report, where screenshots must be repeatable.
+    The user supplies a seed so the exact same dataset can be reproduced on a
+    later run. This matters for the report, where the screenshots must be
+    repeatable.
     """
     print_section("RANDOM CITY GENERATION")
 
@@ -201,12 +226,10 @@ def generate_random_cities():
     return description, names, coords
 
 
-# ---------------------------------------------------------------------------
-# Output formatting
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------- output ----
 
 def name_column_width(names):
-    """Width of the widest city name, with a sensible minimum."""
+    """Return the width of the longest city name, with a sensible minimum."""
     widest = 4
     for name in names:
         if len(name) > widest:
@@ -215,8 +238,8 @@ def name_column_width(names):
 
 
 def print_city_table(names, coords):
-    """Show the raw input data back to the user."""
-    # +2 leaves room for the " *" depot marker appended below, so the
+    """Show the cities back to the user so the input can be confirmed."""
+    # The +2 leaves room for the " *" depot marker added below, so the
     # coordinate columns stay aligned even when the depot has the longest name.
     width = name_column_width(names) + 2
 
@@ -226,7 +249,7 @@ def print_city_table(names, coords):
     for index in range(len(names)):
         label = names[index]
         if index == 0:
-            label += " *"
+            label += " *"                    # mark the depot
         print("  %-4d %-*s %10.2f %10.2f"
               % (index + 1, width, label, coords[index][0], coords[index][1]))
     print("  " + "-" * (4 + width + 23))
@@ -234,7 +257,11 @@ def print_city_table(names, coords):
 
 
 def format_tour(names, tour):
-    """Render a tour as 'A -> B -> C -> A', wrapped to fit the console."""
+    """
+    Render a tour as 'A -> B -> C -> A', wrapped to fit the console width.
+
+    The first city is repeated at the end because a tour is a cycle.
+    """
     labels = [names[city] for city in tour]
     labels.append(names[tour[0]])       # close the cycle
 
@@ -245,7 +272,7 @@ def format_tour(names, tour):
         if position < len(labels) - 1:
             piece += " -> "
         if len(current) + len(piece) > LINE_WIDTH:
-            lines.append(current)
+            lines.append(current)            # start a new line
             current = "      " + piece
         else:
             current += piece
@@ -254,7 +281,11 @@ def format_tour(names, tour):
 
 
 def print_leg_table(names, tour, dist):
-    """Per-leg cost breakdown, ending with the return trip to the depot."""
+    """
+    Print a leg-by-leg cost breakdown of a tour and return its total cost.
+
+    The final row is the return trip to the depot, marked "(return)".
+    """
     width = name_column_width(names)
     total = 0.0
 
@@ -264,7 +295,7 @@ def print_leg_table(names, tour, dist):
 
     for position in range(len(tour)):
         from_city = tour[position]
-        to_city = tour[(position + 1) % len(tour)]
+        to_city = tour[(position + 1) % len(tour)]      # wraps to the depot
         leg_distance = dist[from_city][to_city]
         total += leg_distance
 
@@ -278,12 +309,19 @@ def print_leg_table(names, tour, dist):
     return total
 
 
-# ---------------------------------------------------------------------------
-# The analysis pipeline
-# ---------------------------------------------------------------------------
+# ============================================================================
+#  PART 3 - THE ANALYSIS PIPELINE
+# ============================================================================
 
 def run_analysis(description, names, coords):
-    """Run every stage of the solution and report the results."""
+    """
+    Run all four stages of the solution on one dataset and report the results.
+
+    Stage 1  build a tour with the Nearest Neighbour heuristic
+    Stage 2  improve that tour with 2-opt
+    Stage 3  show how sensitive the heuristic is to its starting city
+    Stage 4  compare against the true optimum, when the input is small enough
+    """
     city_count = len(names)
     dist = tsp.build_distance_matrix(coords)
 
@@ -341,6 +379,7 @@ def run_analysis(description, names, coords):
     print("  %-*s %14s" % (width + 2, "Start city", "NN tour cost"))
     print("  " + "-" * (width + 17))
 
+    # Find the best and worst starting cities with a single scan.
     cheapest_cost = start_costs[0]
     dearest_cost = start_costs[0]
     cheapest_index = 0
@@ -369,6 +408,7 @@ def run_analysis(description, names, coords):
     print("  Spread     : %.2f  (%.2f%% worse from the wrong start)"
           % (spread, spread_percent))
 
+    # Best tour over every starting city, then improved again with 2-opt.
     multi_tour, multi_cost, multi_start = tsp.best_nearest_neighbour_tour(dist)
     multi_improved, _ = tsp.two_opt(multi_tour, dist)
     multi_improved_cost = tsp.tour_length(multi_improved, dist)
@@ -377,7 +417,7 @@ def run_analysis(description, names, coords):
     print_section("STAGE 4 - VALIDATION AGAINST THE TRUE OPTIMUM")
 
     total_possible_tours = factorial(city_count - 1)
-    optimal_cost = None
+    optimal_cost = None                      # stays None if the input is big
 
     if city_count <= tsp.BRUTE_FORCE_LIMIT:
         print()
@@ -393,6 +433,7 @@ def run_analysis(description, names, coords):
         print()
         print("  Optimal cost: %.2f" % optimal_cost)
     else:
+        # Too many tours to check, so no optimality claim can be made.
         print()
         print("  Exhaustive search skipped.")
         print("  This instance has %d cities, which means %s possible tours -"
@@ -423,7 +464,7 @@ def run_analysis(description, names, coords):
             gap = tsp.percentage_gap(cost, optimal_cost)
             gap_text = "%+.2f%%" % gap if gap > 1e-9 else "optimal"
         else:
-            gap_text = "unknown"
+            gap_text = "unknown"             # nothing to compare against
         print("  %-38s %10.2f %12s" % (label, cost, gap_text))
 
     print("  " + "-" * 62)
@@ -450,11 +491,12 @@ def run_analysis(description, names, coords):
         print("  certainty.")
 
 
-# ---------------------------------------------------------------------------
-# Main menu
-# ---------------------------------------------------------------------------
+# ============================================================================
+#  PART 4 - MAIN MENU
+# ============================================================================
 
 def main():
+    """Show the menu, gather one dataset, analyse it, and repeat on request."""
     print_banner()
 
     while True:
@@ -491,6 +533,8 @@ def main():
 
 
 if __name__ == "__main__":
+    # Catch Ctrl+C and end-of-input so the program exits tidily instead of
+    # printing a stack trace.
     try:
         main()
     except (KeyboardInterrupt, EOFError):
