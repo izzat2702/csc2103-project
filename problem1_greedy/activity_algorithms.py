@@ -108,12 +108,10 @@ def verify_selection(selected, source):
             return False, "%s was selected more than once" % (activity[0],)
         seen.append(activity)
 
-    # No two selected activities may overlap. Ordering by end time means it is
-    # enough to compare each activity with the one before it: if every
-    # consecutive pair is clear, every pair is clear. Because the list is
-    # sorted by end time, if activity j starts at or after activity j-1
-    # ends, it also starts at or after every earlier activity's end, since
-    # those ends are all less than or equal to activity j-1's end.
+    # No two selected activities may overlap. After ordering by end time it is
+    # enough to compare each activity with the one before it: if activity j
+    # starts at or after activity j-1 ends, it also starts at or after every
+    # earlier end, because those ends are all no later than j-1's.
     ordered = manual_sort_by_end(selected)
     for i in range(1, len(ordered)):
         previous_name, _, previous_end = ordered[i - 1]
@@ -153,10 +151,8 @@ def is_feasible_set(activities):
     """
     True if every activity in the set could run on one shared resource.
 
-    Ordering by end time first means only consecutive pairs need checking:
-    if activity j starts at or after activity j-1 ends, it also starts at or
-    after every earlier activity's end, since those ends are all less than or
-    equal to activity j-1's end.
+    Ordering by end time first means only consecutive pairs need checking,
+    for the same reason given in verify_selection.
     """
     ordered = manual_sort_by_end(activities)
     for i in range(1, len(ordered)):
@@ -169,10 +165,9 @@ def brute_force_max_count(activities):
     """
     Find the true largest compatible set by checking every possible subset.
 
-    This is the slow but obviously-correct reference implementation. It is not
-    how the program solves the problem - it exists so the greedy result can be
-    held up against the real optimum. Problem 3 does the same thing to measure
-    how far its heuristic falls short; here the answer is that it never does.
+    This is the slow reference implementation, kept simple enough to be easy
+    to trust. It is not how the program solves the problem. It exists so the
+    greedy result can be checked against the real optimum.
 
     Returns (best_count, best_subset). Raises ValueError above
     MAX_BRUTE_FORCE_N, since the work doubles with every extra activity.

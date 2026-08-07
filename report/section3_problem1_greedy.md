@@ -190,25 +190,25 @@ PowerShell console.
 
 ![Main menu](screenshots/problem1_menu.png)
 
-*Figure 1.1 — The opening banner and main menu. The program is launched with
+*Figure 1.1: the opening banner and main menu. The program is launched with
 `python problem1_activity_selection.py` and offers five options.*
 
 ![Sample dataset run](screenshots/problem1_sample_run.png)
 
-*Figure 1.2 — Option 2 loading the built-in textbook dataset of 11 activities.
+*Figure 1.2: option 2 loading the built-in textbook dataset of 11 activities.
 The greedy algorithm selects A1, A4, A8 and A11, and the independent
 `verify_selection` check confirms the four selected activities do not overlap.*
 
 ![Brute force comparison](screenshots/problem1_brute_force_match.png)
 
-*Figure 1.3 — Option 3 running the greedy algorithm and an exhaustive search of
-all 2^n subsets on the same six activities. Both find three activities, giving
-a difference of 0 and a verdict of MATCH. This is the evidence that the greedy
-choice finds the true optimum rather than merely a good answer.*
+*Figure 1.3: option 3 running the greedy algorithm and an exhaustive search of
+all 2^n subsets on the same six activities. Both find three activities, so the
+difference is 0 and the verdict is MATCH. This is the evidence that the greedy
+choice finds the true optimum rather than only a good answer.*
 
 ![Test suite](screenshots/problem1_test_suite.png)
 
-*Figure 1.4 — Option 4 running the built-in test suite. All seven cases print
+*Figure 1.4: option 4 running the built-in test suite. All seven cases print
 their expected and actual selections, each selection is independently
 verified, and the run ends with 7 of 7 tests passed.*
 

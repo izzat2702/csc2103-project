@@ -287,10 +287,9 @@ def compare_with_brute_force(activities):
     Run the greedy algorithm and the exhaustive search on the same input and
     show whether they agree.
 
-    Problem 3 prints how far its heuristic falls short of the optimum. This is
-    the same comparison for Problem 1, and the difference is always zero -
-    which is exactly the point about the greedy choice here. It is not a
-    heuristic that usually works; it provably finds the maximum.
+    The exhaustive search is far too slow to be the real solution, but on
+    small inputs it gives the true optimum to measure against. The two always
+    agree, which is the evidence behind the optimality claim in the report.
     """
     print_activity_table("Input activities", activities)
 
