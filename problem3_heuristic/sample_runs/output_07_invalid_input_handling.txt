@@ -1,0 +1,134 @@
+============================================================================
+  CSC2103 Data Structures & Algorithms - Group Project
+  Problem 3: Heuristic Algorithms
+  Travelling Salesman Problem  -  Nearest Neighbour + 2-opt
+============================================================================
+
+  Select input method:
+    1. Use a built-in sample dataset
+    2. Enter cities manually
+    3. Generate random cities (seeded, reproducible)
+    4. Exit
+
+  Your choice: 
+============================================================================
+  MANUAL CITY ENTRY
+============================================================================
+  City 1 is treated as the depot (the tour starts and ends there).
+
+  How many cities? (3-12):   ! Please enter a whole number.
+  How many cities? (3-12):   ! Please enter a value between 3 and 12.
+  How many cities? (3-12): 
+  Name of city 1 [City1]:     x coordinate:     y coordinate: 
+  Name of city 2 [City2]:     x coordinate:   ! Please enter a number (decimals are allowed).
+    x coordinate:     y coordinate: 
+  Name of city 3 [City3]:     x coordinate:     y coordinate: 
+============================================================================
+  INPUT DATA
+============================================================================
+  Dataset: User-entered dataset - 3 cities
+  Cities : 3
+
+  No.  City            X          Y
+  ---------------------------------
+  1    P1 *         0.00       0.00
+  2    P2           5.00       0.00
+  3    P3           0.00       5.00
+  ---------------------------------
+  * depot - the tour starts and ends here
+
+============================================================================
+  STAGE 1 - NEAREST NEIGHBOUR HEURISTIC (starting at P1)
+============================================================================
+
+  Rule: from the current city, always move to the nearest city
+        that has not been visited yet. Never reconsider.
+
+  Tour found:
+  P1 -> P2 -> P3 -> P1
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     P1   ->  P2           5.00
+  2     P2   ->  P3           7.07
+  3     P3   ->  P1           5.00  (return)
+  --------------------------------
+  TOTAL TOUR COST            17.07
+
+============================================================================
+  STAGE 2 - 2-OPT IMPROVEMENT
+============================================================================
+
+  Repeatedly removes two edges and reconnects them the other way
+  round whenever doing so shortens the tour. Stops when no single
+  swap can improve the tour any further (a local optimum).
+
+  Improved tour:
+  P1 -> P2 -> P3 -> P1
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     P1   ->  P2           5.00
+  2     P2   ->  P3           7.07
+  3     P3   ->  P1           5.00  (return)
+  --------------------------------
+  TOTAL TOUR COST            17.07
+
+  Passes over the tour : 1
+  Cost before 2-opt    :      17.07
+  Cost after 2-opt     :      17.07
+  Saving               :       0.00  (0.00%)
+
+============================================================================
+  STAGE 3 - SENSITIVITY TO THE STARTING CITY
+============================================================================
+
+  A known weakness of Nearest Neighbour: the same set of cities
+  produces different tours depending only on where we begin.
+
+  Start city   NN tour cost
+  ---------------------
+  P1              17.07  <- best
+  P2              17.07
+  P3              17.07
+  ---------------------
+  Best start : P1 (17.07)
+  Worst start: P1 (17.07)
+  Spread     : 0.00  (0.00% worse from the wrong start)
+
+============================================================================
+  STAGE 4 - VALIDATION AGAINST THE TRUE OPTIMUM
+============================================================================
+
+  Exhaustively checking all 2 possible tours...
+  Tours evaluated: 2
+
+  Optimal tour:
+  P1 -> P2 -> P3 -> P1
+
+  Optimal cost: 17.07
+
+============================================================================
+  RESULTS SUMMARY
+============================================================================
+
+  Method                                       Cost   vs Optimal
+  --------------------------------------------------------------
+  Nearest Neighbour (from P1)                 17.07      optimal
+    + 2-opt improvement                       17.07      optimal
+  Best NN over all starts (P1)                17.07      optimal
+    + 2-opt improvement                       17.07      optimal
+  Exhaustive search (true optimum)            17.07      optimal
+  --------------------------------------------------------------
+
+  Plain Nearest Neighbour was 0.00% worse than the optimum.
+  After 2-opt and multi-start, the heuristic found the
+  optimal tour - while checking only a tiny fraction of
+  the 2 possible tours.
+
+  Note: matching the optimum here does NOT prove the heuristic
+  always will. Dataset 2 is included to show a case where
+  plain Nearest Neighbour performs badly.
+
+  Run another analysis? (y/n): 
+  Program ended.

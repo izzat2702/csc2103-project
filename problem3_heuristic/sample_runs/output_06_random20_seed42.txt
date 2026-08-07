@@ -1,0 +1,190 @@
+============================================================================
+  CSC2103 Data Structures & Algorithms - Group Project
+  Problem 3: Heuristic Algorithms
+  Travelling Salesman Problem  -  Nearest Neighbour + 2-opt
+============================================================================
+
+  Select input method:
+    1. Use a built-in sample dataset
+    2. Enter cities manually
+    3. Generate random cities (seeded, reproducible)
+    4. Exit
+
+  Your choice: 
+============================================================================
+  RANDOM CITY GENERATION
+============================================================================
+  How many cities? (3-50):   Random seed (any whole number, e.g. 42): 
+============================================================================
+  INPUT DATA
+============================================================================
+  Dataset: Random dataset - 20 cities (seed 42)
+  Cities : 20
+
+  No.  City            X          Y
+  ---------------------------------
+  1    C1 *        81.00      14.00
+  2    C2           3.00      94.00
+  3    C3          35.00      31.00
+  4    C4          28.00      17.00
+  5    C5          94.00      13.00
+  6    C6          86.00      94.00
+  7    C7          69.00      11.00
+  8    C8          75.00      54.00
+  9    C9           4.00       3.00
+  10   C10         11.00      27.00
+  11   C11         29.00      64.00
+  12   C12         77.00       3.00
+  13   C13         71.00      25.00
+  14   C14         91.00      83.00
+  15   C15         89.00      69.00
+  16   C16         53.00      28.00
+  17   C17         57.00      75.00
+  18   C18         35.00       0.00
+  19   C19         97.00      20.00
+  20   C20         89.00      54.00
+  ---------------------------------
+  * depot - the tour starts and ends here
+
+============================================================================
+  STAGE 1 - NEAREST NEIGHBOUR HEURISTIC (starting at C1)
+============================================================================
+
+  Rule: from the current city, always move to the nearest city
+        that has not been visited yet. Never reconsider.
+
+  Tour found:
+  C1 -> C12 -> C7 -> C13 -> C16 -> C3 -> C4 -> C18 -> C9 -> C10 -> C11 -> 
+      C17 -> C8 -> C20 -> C15 -> C14 -> C6 -> C19 -> C5 -> C2 -> C1
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     C1   ->  C12         11.70
+  2     C12  ->  C7          11.31
+  3     C7   ->  C13         14.14
+  4     C13  ->  C16         18.25
+  5     C16  ->  C3          18.25
+  6     C3   ->  C4          15.65
+  7     C4   ->  C18         18.38
+  8     C18  ->  C9          31.14
+  9     C9   ->  C10         25.00
+  10    C10  ->  C11         41.15
+  11    C11  ->  C17         30.08
+  12    C17  ->  C8          27.66
+  13    C8   ->  C20         14.00
+  14    C20  ->  C15         15.00
+  15    C15  ->  C14         14.14
+  16    C14  ->  C6          12.08
+  17    C6   ->  C19         74.81
+  18    C19  ->  C5           7.62
+  19    C5   ->  C2         121.83
+  20    C2   ->  C1         111.73  (return)
+  --------------------------------
+  TOTAL TOUR COST           633.94
+
+============================================================================
+  STAGE 2 - 2-OPT IMPROVEMENT
+============================================================================
+
+  Repeatedly removes two edges and reconnects them the other way
+  round whenever doing so shortens the tour. Stops when no single
+  swap can improve the tour any further (a local optimum).
+
+  Improved tour:
+  C1 -> C5 -> C19 -> C20 -> C15 -> C14 -> C6 -> C8 -> C17 -> C11 -> C2 -> 
+      C10 -> C9 -> C18 -> C4 -> C3 -> C16 -> C13 -> C7 -> C12 -> C1
+
+  Leg   From     To       Distance
+  --------------------------------
+  1     C1   ->  C5          13.04
+  2     C5   ->  C19          7.62
+  3     C19  ->  C20         34.93
+  4     C20  ->  C15         15.00
+  5     C15  ->  C14         14.14
+  6     C14  ->  C6          12.08
+  7     C6   ->  C8          41.48
+  8     C8   ->  C17         27.66
+  9     C17  ->  C11         30.08
+  10    C11  ->  C2          39.70
+  11    C2   ->  C10         67.48
+  12    C10  ->  C9          25.00
+  13    C9   ->  C18         31.14
+  14    C18  ->  C4          18.38
+  15    C4   ->  C3          15.65
+  16    C3   ->  C16         18.25
+  17    C16  ->  C13         18.25
+  18    C13  ->  C7          14.14
+  19    C7   ->  C12         11.31
+  20    C12  ->  C1          11.70  (return)
+  --------------------------------
+  TOTAL TOUR COST           467.05
+
+  Passes over the tour : 3
+  Cost before 2-opt    :     633.94
+  Cost after 2-opt     :     467.05
+  Saving               :     166.89  (26.33%)
+
+============================================================================
+  STAGE 3 - SENSITIVITY TO THE STARTING CITY
+============================================================================
+
+  A known weakness of Nearest Neighbour: the same set of cities
+  produces different tours depending only on where we begin.
+
+  Start city   NN tour cost
+  ---------------------
+  C1             633.94  <- worst
+  C2             501.72
+  C3             570.91
+  C4             452.09  <- best
+  C5             547.48
+  C6             557.40
+  C7             539.98
+  C8             563.77
+  C9             485.25
+  C10            488.09
+  C11            501.72
+  C12            551.90
+  C13            563.65
+  C14            574.12
+  C15            518.06
+  C16            593.40
+  C17            565.97
+  C18            452.09
+  C19            541.24
+  C20            581.77
+  ---------------------
+  Best start : C4 (452.09)
+  Worst start: C1 (633.94)
+  Spread     : 181.85  (40.22% worse from the wrong start)
+
+============================================================================
+  STAGE 4 - VALIDATION AGAINST THE TRUE OPTIMUM
+============================================================================
+
+  Exhaustive search skipped.
+  This instance has 20 cities, which means 121,645,100,408,832,000 possible tours -
+  far too many to check one by one.
+
+  This is exactly why a heuristic is needed: it returns a good
+  tour in a fraction of a second, where exact search cannot
+  finish at all.
+
+============================================================================
+  RESULTS SUMMARY
+============================================================================
+
+  Method                                       Cost   vs Optimal
+  --------------------------------------------------------------
+  Nearest Neighbour (from C1)                633.94      unknown
+    + 2-opt improvement                      467.05      unknown
+  Best NN over all starts (C4)               452.09      unknown
+    + 2-opt improvement                      452.09      unknown
+  --------------------------------------------------------------
+
+  No optimality guarantee is available at this size - that is
+  the trade-off a heuristic makes: speed in exchange for
+  certainty.
+
+  Run another analysis? (y/n): 
+  Program ended.

@@ -1,0 +1,136 @@
+============================================================================
+  CSC2103 Data Structures & Algorithms - Group Project
+  Problem 3: Heuristic Algorithms
+  Travelling Salesman Problem  -  Nearest Neighbour + 2-opt
+============================================================================
+
+  Select input method:
+    1. Use a built-in sample dataset
+    2. Enter cities manually
+    3. Generate random cities (seeded, reproducible)
+    4. Exit
+
+  Your choice: 
+============================================================================
+  MANUAL CITY ENTRY
+============================================================================
+  City 1 is treated as the depot (the tour starts and ends there).
+
+  How many cities? (3-12): 
+  Name of city 1 [City1]:     x coordinate:     y coordinate: 
+  Name of city 2 [City2]:     x coordinate:     y coordinate: 
+  Name of city 3 [City3]:     x coordinate:     y coordinate: 
+  Name of city 4 [City4]:     x coordinate:     y coordinate: 
+============================================================================
+  INPUT DATA
+============================================================================
+  Dataset: User-entered dataset - 4 cities
+  Cities : 4
+
+  No.  City             X          Y
+  ----------------------------------
+  1    Depot *       0.00       0.00
+  2    North         0.00      10.00
+  3    East         10.00      10.00
+  4    South        10.00       0.00
+  ----------------------------------
+  * depot - the tour starts and ends here
+
+============================================================================
+  STAGE 1 - NEAREST NEIGHBOUR HEURISTIC (starting at Depot)
+============================================================================
+
+  Rule: from the current city, always move to the nearest city
+        that has not been visited yet. Never reconsider.
+
+  Tour found:
+  Depot -> North -> East -> South -> Depot
+
+  Leg   From      To        Distance
+  ----------------------------------
+  1     Depot ->  North        10.00
+  2     North ->  East         10.00
+  3     East  ->  South        10.00
+  4     South ->  Depot        10.00  (return)
+  ----------------------------------
+  TOTAL TOUR COST              40.00
+
+============================================================================
+  STAGE 2 - 2-OPT IMPROVEMENT
+============================================================================
+
+  Repeatedly removes two edges and reconnects them the other way
+  round whenever doing so shortens the tour. Stops when no single
+  swap can improve the tour any further (a local optimum).
+
+  Improved tour:
+  Depot -> North -> East -> South -> Depot
+
+  Leg   From      To        Distance
+  ----------------------------------
+  1     Depot ->  North        10.00
+  2     North ->  East         10.00
+  3     East  ->  South        10.00
+  4     South ->  Depot        10.00  (return)
+  ----------------------------------
+  TOTAL TOUR COST              40.00
+
+  Passes over the tour : 1
+  Cost before 2-opt    :      40.00
+  Cost after 2-opt     :      40.00
+  Saving               :       0.00  (0.00%)
+
+============================================================================
+  STAGE 3 - SENSITIVITY TO THE STARTING CITY
+============================================================================
+
+  A known weakness of Nearest Neighbour: the same set of cities
+  produces different tours depending only on where we begin.
+
+  Start city   NN tour cost
+  ----------------------
+  Depot            40.00  <- best
+  North            40.00
+  East             40.00
+  South            40.00
+  ----------------------
+  Best start : Depot (40.00)
+  Worst start: Depot (40.00)
+  Spread     : 0.00  (0.00% worse from the wrong start)
+
+============================================================================
+  STAGE 4 - VALIDATION AGAINST THE TRUE OPTIMUM
+============================================================================
+
+  Exhaustively checking all 6 possible tours...
+  Tours evaluated: 6
+
+  Optimal tour:
+  Depot -> North -> East -> South -> Depot
+
+  Optimal cost: 40.00
+
+============================================================================
+  RESULTS SUMMARY
+============================================================================
+
+  Method                                       Cost   vs Optimal
+  --------------------------------------------------------------
+  Nearest Neighbour (from Depot)              40.00      optimal
+    + 2-opt improvement                       40.00      optimal
+  Best NN over all starts (Depot)             40.00      optimal
+    + 2-opt improvement                       40.00      optimal
+  Exhaustive search (true optimum)            40.00      optimal
+  --------------------------------------------------------------
+
+  Plain Nearest Neighbour was 0.00% worse than the optimum.
+  After 2-opt and multi-start, the heuristic found the
+  optimal tour - while checking only a tiny fraction of
+  the 6 possible tours.
+
+  Note: matching the optimum here does NOT prove the heuristic
+  always will. Dataset 2 is included to show a case where
+  plain Nearest Neighbour performs badly.
+
+  Run another analysis? (y/n): 
+  Program ended.
