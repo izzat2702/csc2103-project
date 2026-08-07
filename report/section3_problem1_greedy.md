@@ -43,36 +43,90 @@ requirement.
 
 ## Input / Output Design
 
-The program runs in the console and asks the user for:
+The program presents a five-option console menu:
 
-1. How many activities there are.
-2. For each activity, a single line: `name start_time end_time` (e.g.
-   `A1 1 4`).
+1. Enter my own activities
+2. Use a built-in sample dataset
+3. Verify the greedy result against brute force (small inputs)
+4. Run the test suite
+5. Exit
 
-Input is validated — a non-numeric count or a malformed activity line (wrong
-number of fields, non-numeric times, or a start time not before the end
-time) causes a re-prompt rather than crashing the program.
+Option 1 asks how many activities there are, then reads that many lines in
+the form `name start end` (e.g. `A1 1 4`). Input is validated — a
+non-numeric count or a malformed activity line (wrong number of fields,
+non-numeric times, or a start time not before the end time) causes a
+re-prompt rather than crashing the program. Option 2 instead offers a choice
+of five built-in datasets (a textbook example, meeting-room bookings, an
+all-overlapping set, a no-overlap set, and a back-to-back chain), so a
+run can be reproduced without retyping activities. Option 3 runs the same
+input through both the greedy algorithm and an exhaustive brute-force search
+and reports whether they agree. Option 4 runs the built-in test suite.
 
-The output is a simple formatted table of the selected activities (name,
-start, end) followed by a total count, or `"No activities selected."` if the
-input was empty.
+The output for options 1-3 is a formatted table of the selected activities
+(name, start, end) followed by a total count, or `"No activities selected."`
+if the input was empty; each result is also passed through an independent
+`verify_selection` check, printed as `Verification: PASSED - ...` or
+`Verification: FAILED - ...`.
 
-Example interaction:
+Example interaction (loading sample dataset 1, from
+`sample_runs/output_01_textbook.txt`):
 
 ```
-Activity Selection Problem (Greedy)
-------------------------------------
-How many activities? 4
-Activity 1 - enter name, start time, end time (space separated, e.g. 'A1 1 4'): A1 1 4
-Activity 2 - enter name, start time, end time (space separated, e.g. 'A1 1 4'): A2 3 5
-Activity 3 - enter name, start time, end time (space separated, e.g. 'A1 1 4'): A3 0 6
-Activity 4 - enter name, start time, end time (space separated, e.g. 'A1 1 4'): A4 5 7
+====================================================================
+ CSC2103 - Problem 1: Activity Selection using a Greedy Algorithm
+====================================================================
+Given a set of activities that all need the same single resource,
+select the largest number of them that do not overlap.
 
-Name      Start     End
-A1        1         4
-A4        5         7
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 
+--- Sample datasets ---
+  1. Textbook example - 11 activities  (11 activities)
+  2. Meeting room bookings - 7 requests  (7 activities)
+  3. All overlapping - only one can run  (5 activities)
+  4. No overlaps - every activity fits  (5 activities)
+  5. Back-to-back chain - each starts as the last ends  (5 activities)
+Choose a dataset (1 to 5): Loaded: Textbook example - 11 activities
 
-Total selected: 2
+--- Input activities ---
+  Name         Start    End     
+  ------------ -------- --------
+  A1           1        4       
+  A2           3        5       
+  A3           0        6       
+  A4           5        7       
+  A5           3        9       
+  A6           5        9       
+  A7           6        10      
+  A8           8        11      
+  A9           8        12      
+  A10          2        14      
+  A11          12       16      
+
+--- Selected activities (greedy) ---
+Name         Start    End     
+A1           1        4       
+A4           5        7       
+A8           8        11      
+A11          12       16      
+
+Total selected: 4
+
+Verification: PASSED - 4 activities, no overlaps
+
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 
+Goodbye.
 ```
 
 ## Key Code Snippets
@@ -112,19 +166,67 @@ def select_activities(activities):
     return selected
 ```
 
+Exhaustive reference implementation, used to check the greedy result:
+
+```python
+def brute_force_max_count(activities):
+    if len(activities) > MAX_BRUTE_FORCE_N:
+        raise ValueError(
+            "brute force is limited to %d activities (got %d)"
+            % (MAX_BRUTE_FORCE_N, len(activities)))
+
+    best_count = 0
+    best_subset = []
+
+    for subset in generate_subsets(list(activities)):
+        if len(subset) > best_count and is_feasible_set(subset):
+            best_count = len(subset)
+            best_subset = subset
+
+    return best_count, best_subset
+```
+
 ## Screenshots of Sample Runs
 
-<!-- SCREENSHOTS GO HERE -->
-<!-- Suggested: (1) the typical run above, (2) the invalid-input recovery
-     case, (3) the zero-activities case. See problem1_greedy/sample_runs.txt
-     for the exact inputs/outputs to reproduce for each screenshot. -->
+<!-- SCREENSHOTS GO HERE
+Capture the following four screenshots and save them to report/screenshots/,
+then replace this comment with four image links (one line each, with a
+one-line caption), e.g.:
+  ![Main menu](screenshots/problem1_menu.png)
+  Caption: the program's opening banner and main menu.
+
+From problem1_greedy/, run:
+
+1. problem1_menu.png
+   Command:  python problem1_activity_selection.py
+   Then just let it print the banner and the main menu (do not select an
+   option yet, or select nothing further before capturing).
+   Show: the banner and the "--- Main menu ---" listing options 1-5.
+
+2. problem1_sample_run.png
+   Command:  python problem1_activity_selection.py < sample_runs/input_01_textbook.txt
+   Show: the "--- Selected activities (greedy) ---" table, the
+   "Total selected: 4" line, and the "Verification: PASSED" line.
+
+3. problem1_brute_force_match.png
+   Command:  python problem1_activity_selection.py < sample_runs/input_04_brute_force.txt
+   Show: the "Greedy result" and "Brute force result" tables and the
+   "Verdict          : MATCH - the greedy choice found the optimum" line.
+
+4. problem1_test_suite.png
+   Command:  python problem1_activity_selection.py < sample_runs/input_05_test_suite.txt
+   Show: the "TEST SUITE - expected vs actual" output ending in
+   "7 of 7 tests passed."
+-->
+<!-- End of screenshot checklist -->
 
 ## Strengths and Limitations
 
 **Strengths**
-- Always produces the optimal (maximum-count) solution for this specific
-  problem — the greedy choice is provably correct here, unlike many greedy
-  approaches which only give approximations.
+- Always produces the optimal (maximum-count) solution. This is not merely
+  asserted from the exchange argument — menu option 3 checks the greedy result
+  against an exhaustive search of all 2^n subsets, and the automated tests
+  assert the two agree on every sample dataset and test case.
 - Simple and fast: after sorting, the selection pass is a single O(n) walk
   through the list.
 - Handles edge cases cleanly: empty input, a single activity, fully
