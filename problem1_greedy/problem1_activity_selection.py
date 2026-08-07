@@ -1,30 +1,4 @@
-def manual_sort_by_end(activities):
-    sorted_list = list(activities)
-    for i in range(1, len(sorted_list)):
-        current = sorted_list[i]
-        j = i - 1
-        while j >= 0 and sorted_list[j][2] > current[2]:
-            sorted_list[j + 1] = sorted_list[j]
-            j -= 1
-        sorted_list[j + 1] = current
-    return sorted_list
-
-
-def select_activities(activities):
-    if not activities:
-        return []
-
-    sorted_activities = manual_sort_by_end(activities)
-    selected = [sorted_activities[0]]
-    last_end = sorted_activities[0][2]
-
-    for activity in sorted_activities[1:]:
-        start = activity[1]
-        if start >= last_end:
-            selected.append(activity)
-            last_end = activity[2]
-
-    return selected
+from activity_algorithms import manual_sort_by_end, select_activities
 
 
 def format_selection_table(selected):

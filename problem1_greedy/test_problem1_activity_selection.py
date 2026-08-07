@@ -1,4 +1,5 @@
-from problem1_activity_selection import manual_sort_by_end, select_activities, format_selection_table
+from activity_algorithms import manual_sort_by_end, select_activities
+from problem1_activity_selection import format_selection_table
 
 
 def test_manual_sort_by_end_orders_ascending():
