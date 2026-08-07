@@ -16,7 +16,9 @@ import activity_algorithms as alg
 RULE_WIDTH = 68
 
 
-# ==== PART 1 - SCREEN LAYOUT ====
+# ============================================================================
+#  PART 1 - SCREEN LAYOUT
+# ============================================================================
 
 def print_rule(character="="):
     print(character * RULE_WIDTH)
@@ -35,7 +37,9 @@ def print_section(title):
     print("--- %s ---" % title)
 
 
-# ==== PART 2 - INPUT ====
+# ============================================================================
+#  PART 2 - INPUT
+# ============================================================================
 
 def read_line(prompt):
     """
@@ -104,7 +108,9 @@ def read_activities():
     return activities
 
 
-# ==== PART 3 - OUTPUT ====
+# ============================================================================
+#  PART 3 - OUTPUT
+# ============================================================================
 
 def describe_activities(activities):
     """One-line summary, used by the test suite output."""
@@ -154,7 +160,9 @@ def run_and_report(activities):
     print("Verification: %s - %s" % ("PASSED" if ok else "FAILED", message))
 
 
-# ==== PART 4 - SAMPLE DATASETS ====
+# ============================================================================
+#  PART 4 - SAMPLE DATASETS
+# ============================================================================
 
 SAMPLE_DATASETS = [
     ("Textbook example - 11 activities",
@@ -192,7 +200,9 @@ def choose_sample():
     return activities
 
 
-# ==== PART 5 - TEST SUITE ====
+# ============================================================================
+#  PART 5 - TEST SUITE
+# ============================================================================
 
 # (name, activities, expected selection)
 # Imported by test_problem1_activity_selection.py as well, so the automated
@@ -268,7 +278,9 @@ def run_tests():
     print_rule("=")
 
 
-# ==== PART 6 - BRUTE FORCE COMPARISON ====
+# ============================================================================
+#  PART 6 - BRUTE FORCE COMPARISON
+# ============================================================================
 
 def compare_with_brute_force(activities):
     """
@@ -316,7 +328,9 @@ def compare_with_brute_force(activities):
     print_rule("-")
 
 
-# ==== PART 7 - MAIN MENU ====
+# ============================================================================
+#  PART 7 - MAIN MENU
+# ============================================================================
 
 def main():
     print_banner()

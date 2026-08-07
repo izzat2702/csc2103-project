@@ -17,7 +17,9 @@ An activity is a (name, start, end) tuple throughout.
 MAX_BRUTE_FORCE_N = 15
 
 
-# ==== PART 1 - SORTING ====
+# ============================================================================
+#  PART 1 - SORTING
+# ============================================================================
 
 def manual_sort_by_end(activities):
     """
@@ -39,7 +41,9 @@ def manual_sort_by_end(activities):
     return sorted_list
 
 
-# ==== PART 2 - THE GREEDY ALGORITHM ====
+# ============================================================================
+#  PART 2 - THE GREEDY ALGORITHM
+# ============================================================================
 
 def select_activities(activities):
     """
@@ -74,7 +78,9 @@ def select_activities(activities):
     return selected
 
 
-# ==== PART 3 - INDEPENDENT VERIFICATION ====
+# ============================================================================
+#  PART 3 - INDEPENDENT VERIFICATION
+# ============================================================================
 
 def verify_selection(selected, source):
     """
@@ -120,7 +126,9 @@ def verify_selection(selected, source):
     return True, "%d activities, no overlaps" % len(selected)
 
 
-# ==== PART 4 - BRUTE FORCE REFERENCE ====
+# ============================================================================
+#  PART 4 - BRUTE FORCE REFERENCE
+# ============================================================================
 
 def generate_subsets(items):
     """
