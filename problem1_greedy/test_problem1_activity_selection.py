@@ -1,4 +1,14 @@
-from activity_algorithms import manual_sort_by_end, select_activities, verify_selection
+import pytest
+
+from activity_algorithms import (
+    manual_sort_by_end,
+    select_activities,
+    verify_selection,
+    brute_force_max_count,
+    generate_subsets,
+    is_feasible_set,
+    MAX_BRUTE_FORCE_N,
+)
 from problem1_activity_selection import format_selection_table
 
 
@@ -96,3 +106,47 @@ def test_verify_selection_accepts_boundary_touching_activities():
 def test_verify_selection_accepts_empty_selection():
     ok, _ = verify_selection([], [])
     assert ok is True
+
+
+def test_generate_subsets_yields_two_to_the_n():
+    subsets = list(generate_subsets(["a", "b", "c"]))
+    assert len(subsets) == 8
+
+
+def test_generate_subsets_includes_empty_and_full_sets():
+    subsets = list(generate_subsets(["a", "b"]))
+    assert [] in subsets
+    assert ["a", "b"] in subsets
+
+
+def test_generate_subsets_of_empty_list_is_one_empty_subset():
+    assert list(generate_subsets([])) == [[]]
+
+
+def test_is_feasible_set_true_for_non_overlapping():
+    assert is_feasible_set([("A", 1, 4), ("B", 5, 9)]) is True
+
+
+def test_is_feasible_set_true_for_boundary_touching():
+    assert is_feasible_set([("A", 1, 4), ("B", 4, 9)]) is True
+
+
+def test_is_feasible_set_false_for_overlapping():
+    assert is_feasible_set([("A", 1, 5), ("B", 3, 9)]) is False
+
+
+def test_brute_force_finds_the_textbook_optimum():
+    activities = [
+        ("A1", 1, 4), ("A2", 3, 5), ("A3", 0, 6), ("A4", 5, 7),
+        ("A5", 3, 9), ("A6", 5, 9), ("A7", 6, 10), ("A8", 8, 11),
+        ("A9", 8, 12), ("A10", 2, 14), ("A11", 12, 16),
+    ]
+    count, subset = brute_force_max_count(activities)
+    assert count == 4
+    assert is_feasible_set(subset) is True
+
+
+def test_brute_force_refuses_oversized_input():
+    too_many = [("A%d" % i, i, i + 1) for i in range(MAX_BRUTE_FORCE_N + 1)]
+    with pytest.raises(ValueError):
+        brute_force_max_count(too_many)

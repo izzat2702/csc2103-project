@@ -113,3 +113,67 @@ def verify_selection(selected, source):
             return False, "%s and %s overlap" % (previous_name, current_name)
 
     return True, "%d activities, no overlaps" % len(selected)
+
+
+# ==== PART 4 - BRUTE FORCE REFERENCE ====
+
+def generate_subsets(items):
+    """
+    Yield every subset of items.
+
+    Hand-written with a binary counter rather than itertools, because the brief
+    forbids library routines for core algorithmic work. For n items there are
+    2**n subsets, so counting from 0 to 2**n - 1 and reading the bits of the
+    counter enumerates them all exactly once: bit k set means items[k] is in
+    this subset.
+    """
+    total = 1 << len(items)
+    for mask in range(total):
+        subset = []
+        for index in range(len(items)):
+            if mask & (1 << index):
+                subset.append(items[index])
+        yield subset
+
+
+def is_feasible_set(activities):
+    """
+    True if every activity in the set could run on one shared resource.
+
+    Ordering by end time first means only consecutive pairs need checking.
+    """
+    ordered = manual_sort_by_end(activities)
+    for i in range(1, len(ordered)):
+        if ordered[i][1] < ordered[i - 1][2]:
+            return False
+    return True
+
+
+def brute_force_max_count(activities):
+    """
+    Find the true largest compatible set by checking every possible subset.
+
+    This is the slow but obviously-correct reference implementation. It is not
+    how the program solves the problem - it exists so the greedy result can be
+    held up against the real optimum. Problem 3 does the same thing to measure
+    how far its heuristic falls short; here the answer is that it never does.
+
+    Returns (best_count, best_subset). Raises ValueError above
+    MAX_BRUTE_FORCE_N, since the work doubles with every extra activity.
+    """
+    if len(activities) > MAX_BRUTE_FORCE_N:
+        raise ValueError(
+            "brute force is limited to %d activities (got %d)"
+            % (MAX_BRUTE_FORCE_N, len(activities)))
+
+    best_count = 0
+    best_subset = []
+
+    for subset in generate_subsets(list(activities)):
+        # Checking the size first is much cheaper than checking feasibility,
+        # so subsets that cannot beat the current best are skipped outright.
+        if len(subset) > best_count and is_feasible_set(subset):
+            best_count = len(subset)
+            best_subset = subset
+
+    return best_count, best_subset
