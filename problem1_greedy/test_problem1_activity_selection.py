@@ -12,7 +12,6 @@ from activity_algorithms import (
 from problem1_activity_selection import (
     SAMPLE_DATASETS,
     TEST_CASES,
-    describe_activities,
     format_selection_table,
 )
 

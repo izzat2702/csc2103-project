@@ -12,11 +12,11 @@ select the largest number of them that do not overlap.
   5. Exit
 Select an option (1 to 5): 
 --- Sample datasets ---
-  1. Textbook example - 11 activities  (11 activities)
-  2. Meeting room bookings - 7 requests  (7 activities)
-  3. All overlapping - only one can run  (5 activities)
-  4. No overlaps - every activity fits  (5 activities)
-  5. Back-to-back chain - each starts as the last ends  (5 activities)
+  1. Textbook example - 11 activities
+  2. Meeting room bookings - 7 requests
+  3. All overlapping - only one can run
+  4. No overlaps - every activity fits
+  5. Back-to-back chain - each starts as the last ends
 Choose a dataset (1 to 5): Loaded: All overlapping - only one can run
 
 --- Input activities ---
@@ -34,7 +34,7 @@ Echo         5        6
 
 Total selected: 1
 
-Verification: PASSED - 1 activities, no overlaps
+Verification: PASSED - 1 activity, no overlaps
 
 --- Main menu ---
   1. Enter my own activities

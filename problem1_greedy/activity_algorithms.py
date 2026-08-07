@@ -104,7 +104,10 @@ def verify_selection(selected, source):
 
     # No two selected activities may overlap. Ordering by end time means it is
     # enough to compare each activity with the one before it: if every
-    # consecutive pair is clear, every pair is clear.
+    # consecutive pair is clear, every pair is clear. Because the list is
+    # sorted by end time, if activity j starts at or after activity j-1
+    # ends, it also starts at or after every earlier activity's end, since
+    # those ends are all less than or equal to activity j-1's end.
     ordered = manual_sort_by_end(selected)
     for i in range(1, len(ordered)):
         previous_name, _, previous_end = ordered[i - 1]
@@ -112,6 +115,8 @@ def verify_selection(selected, source):
         if current_start < previous_end:
             return False, "%s and %s overlap" % (previous_name, current_name)
 
+    if len(selected) == 1:
+        return True, "1 activity, no overlaps"
     return True, "%d activities, no overlaps" % len(selected)
 
 
@@ -140,7 +145,10 @@ def is_feasible_set(activities):
     """
     True if every activity in the set could run on one shared resource.
 
-    Ordering by end time first means only consecutive pairs need checking.
+    Ordering by end time first means only consecutive pairs need checking:
+    if activity j starts at or after activity j-1 ends, it also starts at or
+    after every earlier activity's end, since those ends are all less than or
+    equal to activity j-1's end.
     """
     ordered = manual_sort_by_end(activities)
     for i in range(1, len(ordered)):

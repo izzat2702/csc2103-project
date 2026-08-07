@@ -24,7 +24,7 @@ Test: Empty input
 Test: Single activity
   Expected : A(1-5)
   Actual   : A(1-5)
-  Check    : verified: 1 activities, no overlaps
+  Check    : verified: 1 activity, no overlaps
   Result   : PASS
 
 Test: No overlaps - all selected
@@ -36,7 +36,7 @@ Test: No overlaps - all selected
 Test: All overlapping - one selected
   Expected : C(3-8)
   Actual   : C(3-8)
-  Check    : verified: 1 activities, no overlaps
+  Check    : verified: 1 activity, no overlaps
   Result   : PASS
 
 Test: Textbook example - 11 activities

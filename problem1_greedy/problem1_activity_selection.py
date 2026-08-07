@@ -183,7 +183,7 @@ def choose_sample():
     """Let the user pick a built-in dataset. Returns the activity list."""
     print_section("Sample datasets")
     for i, (description, activities) in enumerate(SAMPLE_DATASETS, start=1):
-        print("  %d. %s  (%d activities)" % (i, description, len(activities)))
+        print("  %d. %s" % (i, description))
 
     choice = read_int("Choose a dataset (1 to %d): " % len(SAMPLE_DATASETS),
                       1, len(SAMPLE_DATASETS))
