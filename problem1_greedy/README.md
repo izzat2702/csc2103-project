@@ -25,9 +25,9 @@ and takes every activity that starts no earlier than the last selected one
 finished.
 
 ## Why the greedy choice is right here
-Option 3 proves it rather than claiming it. It runs the greedy algorithm and an
-exhaustive search over all 2^n subsets on the same input, and reports whether
-they agree. They always do — the difference is always zero.
+Option 3 checks this instead of just claiming it. It runs the greedy algorithm
+and an exhaustive search over all 2^n subsets on the same input and reports
+whether they agree. They always do, and the difference is always zero.
 
 ## Replaying the sample runs
 ```

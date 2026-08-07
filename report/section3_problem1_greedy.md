@@ -26,20 +26,17 @@ The algorithm works in two steps:
    subsequent activity, select it only if its start time is greater than or
    equal to the end time of the most recently selected activity.
 
-This greedy choice is suitable because finishing early leaves the most room
-remaining for future activities — picking the activity that ends soonest
-never does worse than any other valid choice, and can be proven optimal via
-an exchange argument (any optimal solution can be rearranged to start with
-the earliest-finishing activity without reducing the number of activities
-selected). This also gives the problem optimal substructure: once the
-earliest-finishing activity is chosen, the remaining problem is just Activity
-Selection again on the activities compatible with it.
+This choice works because finishing early leaves the most time available for
+the activities that follow. Picking the activity that ends soonest never does
+worse than any other valid choice. An exchange argument proves it: any optimal
+solution can be rearranged to start with the earliest-finishing activity
+without reducing how many activities it contains. The problem also has optimal
+substructure. Once the earliest-finishing activity is chosen, what remains is
+the same Activity Selection problem on the activities compatible with it.
 
-Per the assignment rules, sorting could not rely on a built-in `sort()` /
-`sorted()` call since that would be using a library to solve part of the core
-algorithmic task. A manual insertion sort was written instead
-(`manual_sort_by_end`), keeping the sort itself within the "hand-written"
-requirement.
+The assignment rules do not allow a built-in `sort()` or `sorted()` call here,
+because sorting is part of the core algorithmic task rather than formatting.
+`manual_sort_by_end` implements insertion sort by hand instead.
 
 ## Input / Output Design
 
@@ -52,10 +49,10 @@ The program presents a five-option console menu:
 5. Exit
 
 Option 1 asks how many activities there are, then reads that many lines in
-the form `name start end` (e.g. `A1 1 4`). Input is validated — a
-non-numeric count or a malformed activity line (wrong number of fields,
-non-numeric times, or a start time not before the end time) causes a
-re-prompt rather than crashing the program. Option 2 instead offers a choice
+the form `name start end` (for example `A1 1 4`). The program validates every
+entry. A non-numeric count, or a malformed activity line with the wrong number
+of fields, non-numeric times, or a start time not before the end time,
+produces a re-prompt instead of a crash. Option 2 instead offers a choice
 of five built-in datasets (a textbook example, meeting-room bookings, an
 all-overlapping set, a no-overlap set, and a back-to-back chain), so a
 run can be reproduced without retyping activities. Option 3 runs the same
@@ -86,11 +83,11 @@ select the largest number of them that do not overlap.
   5. Exit
 Select an option (1 to 5): 
 --- Sample datasets ---
-  1. Textbook example - 11 activities  (11 activities)
-  2. Meeting room bookings - 7 requests  (7 activities)
-  3. All overlapping - only one can run  (5 activities)
-  4. No overlaps - every activity fits  (5 activities)
-  5. Back-to-back chain - each starts as the last ends  (5 activities)
+  1. Textbook example - 11 activities
+  2. Meeting room bookings - 7 requests
+  3. All overlapping - only one can run
+  4. No overlaps - every activity fits
+  5. Back-to-back chain - each starts as the last ends
 Choose a dataset (1 to 5): Loaded: Textbook example - 11 activities
 
 --- Input activities ---
@@ -223,10 +220,11 @@ From problem1_greedy/, run:
 ## Strengths and Limitations
 
 **Strengths**
-- Always produces the optimal (maximum-count) solution. This is not merely
-  asserted from the exchange argument — menu option 3 checks the greedy result
-  against an exhaustive search of all 2^n subsets, and the automated tests
-  assert the two agree on every sample dataset and test case.
+- Always produces the optimal (maximum-count) solution. The exchange argument
+  shows this in theory, and the program checks it in practice: menu option 3
+  compares the greedy result against an exhaustive search of all 2^n subsets,
+  and the automated tests confirm the two agree on every sample dataset and
+  test case.
 - Simple and fast: after sorting, the selection pass is a single O(n) walk
   through the list.
 - Handles edge cases cleanly: empty input, a single activity, fully
@@ -235,14 +233,14 @@ From problem1_greedy/, run:
   covered by automated tests.
 
 **Limitations**
-- The hand-written insertion sort is O(n^2) in the worst case, so for very
-  large activity sets a faster sort (merge sort, quicksort) would scale
-  better — though still hand-written to satisfy the assignment's no-built-in
-  rule.
+- The hand-written insertion sort is O(n^2) in the worst case, so a faster
+  sort such as merge sort or quicksort would scale better on very large
+  activity sets. It would still have to be written by hand to satisfy the
+  assignment's no-built-in rule.
 - The algorithm only handles a single shared resource. If there were
   multiple identical resources (e.g. 3 interchangeable rooms), this exact
   approach would need to be extended (e.g. run repeatedly, or track multiple
   "last end time" slots).
 - Ties on end time are broken by whichever activity appears first in the
-  input after sorting (a stable sort), which is a reasonable default but not
-  something the user can otherwise control.
+  input, because the sort is stable. This is a reasonable default, but the
+  user cannot change it.
