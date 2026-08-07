@@ -185,37 +185,32 @@ def brute_force_max_count(activities):
 
 ## Screenshots of Sample Runs
 
-<!-- SCREENSHOTS GO HERE
-Capture the following four screenshots and save them to report/screenshots/,
-then replace this comment with four image links (one line each, with a
-one-line caption), e.g.:
-  ![Main menu](screenshots/problem1_menu.png)
-  Caption: the program's opening banner and main menu.
+All four runs below were captured from the program running in a Windows
+PowerShell console.
 
-From problem1_greedy/, run:
+![Main menu](screenshots/problem1_menu.png)
 
-1. problem1_menu.png
-   Command:  python problem1_activity_selection.py
-   Then just let it print the banner and the main menu (do not select an
-   option yet, or select nothing further before capturing).
-   Show: the banner and the "--- Main menu ---" listing options 1-5.
+*Figure 1.1 — The opening banner and main menu. The program is launched with
+`python problem1_activity_selection.py` and offers five options.*
 
-2. problem1_sample_run.png
-   Command:  python problem1_activity_selection.py < sample_runs/input_01_textbook.txt
-   Show: the "--- Selected activities (greedy) ---" table, the
-   "Total selected: 4" line, and the "Verification: PASSED" line.
+![Sample dataset run](screenshots/problem1_sample_run.png)
 
-3. problem1_brute_force_match.png
-   Command:  python problem1_activity_selection.py < sample_runs/input_04_brute_force.txt
-   Show: the "Greedy result" and "Brute force result" tables and the
-   "Verdict          : MATCH - the greedy choice found the optimum" line.
+*Figure 1.2 — Option 2 loading the built-in textbook dataset of 11 activities.
+The greedy algorithm selects A1, A4, A8 and A11, and the independent
+`verify_selection` check confirms the four selected activities do not overlap.*
 
-4. problem1_test_suite.png
-   Command:  python problem1_activity_selection.py < sample_runs/input_05_test_suite.txt
-   Show: the "TEST SUITE - expected vs actual" output ending in
-   "7 of 7 tests passed."
--->
-<!-- End of screenshot checklist -->
+![Brute force comparison](screenshots/problem1_brute_force_match.png)
+
+*Figure 1.3 — Option 3 running the greedy algorithm and an exhaustive search of
+all 2^n subsets on the same six activities. Both find three activities, giving
+a difference of 0 and a verdict of MATCH. This is the evidence that the greedy
+choice finds the true optimum rather than merely a good answer.*
+
+![Test suite](screenshots/problem1_test_suite.png)
+
+*Figure 1.4 — Option 4 running the built-in test suite. All seven cases print
+their expected and actual selections, each selection is independently
+verified, and the run ends with 7 of 7 tests passed.*
 
 ## Strengths and Limitations
 
