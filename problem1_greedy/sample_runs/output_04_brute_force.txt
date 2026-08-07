@@ -1,0 +1,65 @@
+====================================================================
+ CSC2103 - Problem 1: Activity Selection using a Greedy Algorithm
+====================================================================
+Given a set of activities that all need the same single resource,
+select the largest number of them that do not overlap.
+
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 
+Brute force checks every possible subset, so keep this to
+at most 15 activities.
+Number of activities:   Activity 1 - name start end (e.g. A1 1 4):   Activity 2 - name start end (e.g. A1 1 4):   Activity 3 - name start end (e.g. A1 1 4):   Activity 4 - name start end (e.g. A1 1 4):   Activity 5 - name start end (e.g. A1 1 4):   Activity 6 - name start end (e.g. A1 1 4):   Activity 7 - name start end (e.g. A1 1 4):   Activity 8 - name start end (e.g. A1 1 4):   Activity 9 - name start end (e.g. A1 1 4):   Activity 10 - name start end (e.g. A1 1 4):   Activity 11 - name start end (e.g. A1 1 4): 
+--- Input activities ---
+  Name         Start    End     
+  ------------ -------- --------
+  A1           1        4       
+  A2           3        5       
+  A3           0        6       
+  A4           5        7       
+  A5           3        9       
+  A6           5        9       
+  A7           6        10      
+  A8           8        11      
+  A9           8        12      
+  A10          2        14      
+  A11          12       16      
+
+--- Greedy result ---
+Name         Start    End     
+A1           1        4       
+A4           5        7       
+A8           8        11      
+A11          12       16      
+
+Total selected: 4
+
+--- Brute force result (every subset checked) ---
+Name         Start    End     
+A1           1        4       
+A4           5        7       
+A8           8        11      
+A11          12       16      
+
+Total selected: 4
+
+--------------------------------------------------------------------
+Greedy selected  : 4 activities
+True optimum     : 4 activities
+Difference       : 0
+Greedy is valid  : yes (4 activities, no overlaps)
+Verdict          : MATCH - the greedy choice found the optimum
+--------------------------------------------------------------------
+
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 
+Goodbye.

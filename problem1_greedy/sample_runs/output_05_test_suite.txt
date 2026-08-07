@@ -1,0 +1,71 @@
+====================================================================
+ CSC2103 - Problem 1: Activity Selection using a Greedy Algorithm
+====================================================================
+Given a set of activities that all need the same single resource,
+select the largest number of them that do not overlap.
+
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 
+====================================================================
+ TEST SUITE - expected vs actual
+====================================================================
+
+Test: Empty input
+  Expected : (none)
+  Actual   : (none)
+  Check    : nothing selected, nothing to verify
+  Result   : PASS
+
+Test: Single activity
+  Expected : A(1-5)
+  Actual   : A(1-5)
+  Check    : verified: 1 activities, no overlaps
+  Result   : PASS
+
+Test: No overlaps - all selected
+  Expected : A(1-2), B(3-4), C(5-6)
+  Actual   : A(1-2), B(3-4), C(5-6)
+  Check    : verified: 3 activities, no overlaps
+  Result   : PASS
+
+Test: All overlapping - one selected
+  Expected : C(3-8)
+  Actual   : C(3-8)
+  Check    : verified: 1 activities, no overlaps
+  Result   : PASS
+
+Test: Textbook example - 11 activities
+  Expected : A1(1-4), A4(5-7), A8(8-11), A11(12-16)
+  Actual   : A1(1-4), A4(5-7), A8(8-11), A11(12-16)
+  Check    : verified: 4 activities, no overlaps
+  Result   : PASS
+
+Test: Touching at the boundary is compatible
+  Expected : A(1-4), B(4-8)
+  Actual   : A(1-4), B(4-8)
+  Check    : verified: 2 activities, no overlaps
+  Result   : PASS
+
+Test: Unsorted input is handled
+  Expected : A(1-4), C(5-9)
+  Actual   : A(1-4), C(5-9)
+  Check    : verified: 2 activities, no overlaps
+  Result   : PASS
+
+====================================================================
+7 of 7 tests passed.
+====================================================================
+
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 
+Goodbye.

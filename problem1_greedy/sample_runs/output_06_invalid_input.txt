@@ -1,0 +1,41 @@
+====================================================================
+ CSC2103 - Problem 1: Activity Selection using a Greedy Algorithm
+====================================================================
+Given a set of activities that all need the same single resource,
+select the largest number of them that do not overlap.
+
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5):   Please enter a number no greater than 5.
+Select an option (1 to 5):   Please enter a whole number.
+Select an option (1 to 5): Number of activities:   Please enter a whole number.
+Number of activities:   Activity 1 - name start end (e.g. A1 1 4):     Start time must be before end time.
+  Activity 1 - name start end (e.g. A1 1 4):   Activity 2 - name start end (e.g. A1 1 4):     Start and end must be whole numbers.
+  Activity 2 - name start end (e.g. A1 1 4): 
+--- Input activities ---
+  Name         Start    End     
+  ------------ -------- --------
+  A1           1        4       
+  A2           5        7       
+
+--- Selected activities (greedy) ---
+Name         Start    End     
+A1           1        4       
+A2           5        7       
+
+Total selected: 2
+
+Verification: PASSED - 2 activities, no overlaps
+
+--- Main menu ---
+  1. Enter my own activities
+  2. Use a built-in sample dataset
+  3. Verify the greedy result against brute force (small inputs)
+  4. Run the test suite
+  5. Exit
+Select an option (1 to 5): 
+Goodbye.
