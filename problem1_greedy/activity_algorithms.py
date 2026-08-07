@@ -72,3 +72,44 @@ def select_activities(activities):
             last_end = activity[2]
 
     return selected
+
+
+# ==== PART 3 - INDEPENDENT VERIFICATION ====
+
+def verify_selection(selected, source):
+    """
+    Check a selection without trusting the algorithm that produced it.
+
+    This deliberately does not reuse any of the greedy logic. It re-derives the
+    answer to "is this actually a valid set of non-overlapping activities from
+    the given input?" from scratch, so that a bug in select_activities cannot
+    hide behind a check that shares the same mistake.
+
+    Returns (ok, message) where message is safe to print either way.
+    """
+    if not selected:
+        return True, "nothing selected, nothing to check"
+
+    # Every selected activity must actually have come from the input.
+    for activity in selected:
+        if activity not in source:
+            return False, "%s is not in the input" % (activity[0],)
+
+    # No activity may be selected twice.
+    seen = []
+    for activity in selected:
+        if activity in seen:
+            return False, "%s was selected more than once" % (activity[0],)
+        seen.append(activity)
+
+    # No two selected activities may overlap. Ordering by end time means it is
+    # enough to compare each activity with the one before it: if every
+    # consecutive pair is clear, every pair is clear.
+    ordered = manual_sort_by_end(selected)
+    for i in range(1, len(ordered)):
+        previous_name, _, previous_end = ordered[i - 1]
+        current_name, current_start, _ = ordered[i]
+        if current_start < previous_end:
+            return False, "%s and %s overlap" % (previous_name, current_name)
+
+    return True, "%d activities, no overlaps" % len(selected)

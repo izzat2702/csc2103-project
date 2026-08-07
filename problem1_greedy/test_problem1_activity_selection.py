@@ -1,4 +1,4 @@
-from activity_algorithms import manual_sort_by_end, select_activities
+from activity_algorithms import manual_sort_by_end, select_activities, verify_selection
 from problem1_activity_selection import format_selection_table
 
 
@@ -58,3 +58,41 @@ def test_format_selection_table_lists_name_start_end_and_count():
     assert "A4" in output
     assert "1" in output and "4" in output
     assert "Total selected: 2" in output
+
+
+def test_verify_selection_accepts_a_valid_selection():
+    source = [("A", 1, 4), ("B", 3, 5), ("C", 5, 9)]
+    ok, message = verify_selection([("A", 1, 4), ("C", 5, 9)], source)
+    assert ok is True
+    assert "2 activities" in message
+
+
+def test_verify_selection_rejects_overlapping_activities():
+    source = [("A", 1, 4), ("B", 3, 5)]
+    ok, message = verify_selection([("A", 1, 4), ("B", 3, 5)], source)
+    assert ok is False
+    assert "overlap" in message
+
+
+def test_verify_selection_rejects_an_activity_not_in_the_input():
+    ok, message = verify_selection([("Ghost", 1, 2)], [("A", 1, 4)])
+    assert ok is False
+    assert "not in the input" in message
+
+
+def test_verify_selection_rejects_a_duplicate():
+    source = [("A", 1, 4)]
+    ok, message = verify_selection([("A", 1, 4), ("A", 1, 4)], source)
+    assert ok is False
+    assert "more than once" in message
+
+
+def test_verify_selection_accepts_boundary_touching_activities():
+    source = [("A", 1, 4), ("B", 4, 8)]
+    ok, _ = verify_selection([("A", 1, 4), ("B", 4, 8)], source)
+    assert ok is True
+
+
+def test_verify_selection_accepts_empty_selection():
+    ok, _ = verify_selection([], [])
+    assert ok is True
