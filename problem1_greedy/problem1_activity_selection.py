@@ -192,6 +192,82 @@ def choose_sample():
     return activities
 
 
+# ==== PART 5 - TEST SUITE ====
+
+# (name, activities, expected selection)
+# Imported by test_problem1_activity_selection.py as well, so the automated
+# tests and the in-program suite can never disagree about the right answer.
+TEST_CASES = [
+    ("Empty input", [], []),
+
+    ("Single activity", [("A", 1, 5)], [("A", 1, 5)]),
+
+    ("No overlaps - all selected",
+     [("A", 1, 2), ("B", 3, 4), ("C", 5, 6)],
+     [("A", 1, 2), ("B", 3, 4), ("C", 5, 6)]),
+
+    ("All overlapping - one selected",
+     [("A", 1, 10), ("B", 2, 9), ("C", 3, 8)],
+     [("C", 3, 8)]),
+
+    ("Textbook example - 11 activities",
+     [("A1", 1, 4), ("A2", 3, 5), ("A3", 0, 6), ("A4", 5, 7),
+      ("A5", 3, 9), ("A6", 5, 9), ("A7", 6, 10), ("A8", 8, 11),
+      ("A9", 8, 12), ("A10", 2, 14), ("A11", 12, 16)],
+     [("A1", 1, 4), ("A4", 5, 7), ("A8", 8, 11), ("A11", 12, 16)]),
+
+    ("Touching at the boundary is compatible",
+     [("A", 1, 4), ("B", 4, 8)],
+     [("A", 1, 4), ("B", 4, 8)]),
+
+    ("Unsorted input is handled",
+     [("C", 5, 9), ("A", 1, 4), ("B", 3, 5)],
+     [("A", 1, 4), ("C", 5, 9)]),
+]
+
+
+def run_tests():
+    """
+    Run every case and print expected against actual.
+
+    Each selection produced is also put through verify_selection, so a case
+    only passes if it both matches the expected answer and survives an
+    independent check.
+    """
+    print()
+    print_rule("=")
+    print(" TEST SUITE - expected vs actual")
+    print_rule("=")
+
+    passed = 0
+    for name, activities, expected in TEST_CASES:
+        actual = alg.select_activities(activities)
+        ok = (actual == expected)
+
+        if actual:
+            valid, message = alg.verify_selection(actual, activities)
+            detail = "verified: %s" % message
+            if not valid:
+                ok = False
+        else:
+            detail = "nothing selected, nothing to verify"
+
+        if ok:
+            passed += 1
+
+        print()
+        print("Test: %s" % name)
+        print("  Expected : %s" % describe_activities(expected))
+        print("  Actual   : %s" % describe_activities(actual))
+        print("  Check    : %s" % detail)
+        print("  Result   : %s" % ("PASS" if ok else "FAIL"))
+
+    print()
+    print_rule("=")
+    print("%d of %d tests passed." % (passed, len(TEST_CASES)))
+    print_rule("=")
+
+
 def main():
     """Placeholder until Task 6 builds the menu."""
     print_banner()

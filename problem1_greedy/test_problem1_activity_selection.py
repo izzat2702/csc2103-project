@@ -9,7 +9,12 @@ from activity_algorithms import (
     is_feasible_set,
     MAX_BRUTE_FORCE_N,
 )
-from problem1_activity_selection import format_selection_table
+from problem1_activity_selection import (
+    SAMPLE_DATASETS,
+    TEST_CASES,
+    describe_activities,
+    format_selection_table,
+)
 
 
 def test_manual_sort_by_end_orders_ascending():
@@ -150,3 +155,34 @@ def test_brute_force_refuses_oversized_input():
     too_many = [("A%d" % i, i, i + 1) for i in range(MAX_BRUTE_FORCE_N + 1)]
     with pytest.raises(ValueError):
         brute_force_max_count(too_many)
+
+
+def test_every_in_program_test_case_matches_the_greedy_result():
+    """Whatever run_tests() prints as PASS, pytest must agree with."""
+    for name, activities, expected in TEST_CASES:
+        assert select_activities(activities) == expected, "mismatch on: %s" % name
+
+
+def test_every_in_program_expected_selection_is_actually_valid():
+    for name, activities, expected in TEST_CASES:
+        ok, message = verify_selection(expected, activities)
+        assert ok is True, "invalid expectation for %s: %s" % (name, message)
+
+
+def test_greedy_matches_brute_force_on_every_test_case():
+    """The claim that this greedy is optimal, checked rather than asserted."""
+    for name, activities, _ in TEST_CASES:
+        if len(activities) > MAX_BRUTE_FORCE_N:
+            continue
+        greedy = select_activities(activities)
+        optimum, _ = brute_force_max_count(activities)
+        assert len(greedy) == optimum, "greedy was not optimal for: %s" % name
+
+
+def test_greedy_matches_brute_force_on_every_sample_dataset():
+    for description, activities in SAMPLE_DATASETS:
+        if len(activities) > MAX_BRUTE_FORCE_N:
+            continue
+        greedy = select_activities(activities)
+        optimum, _ = brute_force_max_count(activities)
+        assert len(greedy) == optimum, "greedy was not optimal for: %s" % description
