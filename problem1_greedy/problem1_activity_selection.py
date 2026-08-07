@@ -268,10 +268,88 @@ def run_tests():
     print_rule("=")
 
 
+# ==== PART 6 - BRUTE FORCE COMPARISON ====
+
+def compare_with_brute_force(activities):
+    """
+    Run the greedy algorithm and the exhaustive search on the same input and
+    show whether they agree.
+
+    Problem 3 prints how far its heuristic falls short of the optimum. This is
+    the same comparison for Problem 1, and the difference is always zero -
+    which is exactly the point about the greedy choice here. It is not a
+    heuristic that usually works; it provably finds the maximum.
+    """
+    print_activity_table("Input activities", activities)
+
+    selected = alg.select_activities(activities)
+
+    try:
+        best_count, best_subset = alg.brute_force_max_count(activities)
+    except ValueError as error:
+        print()
+        print("Cannot brute force this input: %s" % error)
+        print("Brute force checks 2^n subsets, so it is only practical on")
+        print("small inputs. The greedy result is shown below regardless.")
+        print_section("Greedy result")
+        print(format_selection_table(selected))
+        return
+
+    print_section("Greedy result")
+    print(format_selection_table(selected))
+
+    print_section("Brute force result (every subset checked)")
+    print(format_selection_table(alg.manual_sort_by_end(best_subset)))
+
+    ok, message = alg.verify_selection(selected, activities)
+
+    print()
+    print_rule("-")
+    print("Greedy selected  : %d activities" % len(selected))
+    print("True optimum     : %d activities" % best_count)
+    print("Difference       : %d" % (best_count - len(selected)))
+    print("Greedy is valid  : %s (%s)" % ("yes" if ok else "no", message))
+    if len(selected) == best_count:
+        print("Verdict          : MATCH - the greedy choice found the optimum")
+    else:
+        print("Verdict          : MISMATCH - the greedy result is not optimal")
+    print_rule("-")
+
+
+# ==== PART 7 - MAIN MENU ====
+
 def main():
-    """Placeholder until Task 6 builds the menu."""
     print_banner()
-    run_and_report(read_activities())
+
+    while True:
+        print_section("Main menu")
+        print("  1. Enter my own activities")
+        print("  2. Use a built-in sample dataset")
+        print("  3. Verify the greedy result against brute force (small inputs)")
+        print("  4. Run the test suite")
+        print("  5. Exit")
+
+        choice = read_int("Select an option (1 to 5): ", 1, 5)
+
+        if choice == 1:
+            run_and_report(read_activities())
+
+        elif choice == 2:
+            run_and_report(choose_sample())
+
+        elif choice == 3:
+            print()
+            print("Brute force checks every possible subset, so keep this to")
+            print("at most %d activities." % alg.MAX_BRUTE_FORCE_N)
+            compare_with_brute_force(read_activities())
+
+        elif choice == 4:
+            run_tests()
+
+        elif choice == 5:
+            print()
+            print("Goodbye.")
+            break
 
 
 if __name__ == "__main__":
